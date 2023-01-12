@@ -8,7 +8,7 @@
  *  Student ID: 113552194
  *  Date: January 27, 2023
  *
- *  Online (Cyclic) URL: _______________________________________________________
+ *  Online (Cyclic) URL: https://desert-sand-eel-cap.cyclic.app
  *
  ********************************************************************************/
 
@@ -18,7 +18,7 @@ var app = express();
 
 // setup a 'route' to listen on the default url path
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Sang Hyon Jeon - 113552194");
 });
 
 // setup http server to listen on HTTP_PORT
