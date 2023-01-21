@@ -19,7 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="w1p1.cpp" />
+    <ClCompile Include="50Best.cpp" />
+    <ClCompile Include="File.cpp" />
+    <ClCompile Include="Movie.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="File.h" />
+    <ClInclude Include="Movie.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
