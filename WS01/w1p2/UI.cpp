@@ -29,31 +29,6 @@ namespace sdds {
     }
 
     /*
-    void promptUserInput() {
-        double gpaInput;
-        char optionInput;
-
-        int flag = 0;
-
-        do {
-            cout << "? ";
-            scanf("%c%lf", &optionInput, &gpaInput);
-
-            if (optionInput == '>') {
-                printf("%c%lf", optionInput, gpaInput);
-            }
-            else if (optionInput == '<') {
-                printf("%c%lf", optionInput, gpaInput);
-            }
-            else if (optionInput == '~') {
-                printf("%c%lf", optionInput, gpaInput);
-            }
-            else if (optionInput == '!') {
-                flag = 1;
-            }
-            else {
-                displayErrorMessage();
-            }
-        } while (!flag);
-    }*/
+    maybe another function here to scan the user's inputs here, instead of inside gpaQuery()
+    */
 }

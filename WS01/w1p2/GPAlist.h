@@ -14,6 +14,7 @@
 #define SDDS_GPSLIST_H
 
 namespace sdds {
+    void clearInputBuffer(void);
     bool gpaQuery(const char* fiilename);
 }
 #endif

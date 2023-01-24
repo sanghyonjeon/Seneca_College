@@ -31,55 +31,11 @@ namespace sdds {
         numRecords = loadData(filename, gptr, MAX_RECORDS);
 
         if (numRecords) {
+            //Test purposes
+            //printf("% s, % d, % lf\n", gptr[1].name, gptr[1].stno, gptr[1].gpa);
             displayPromptMessage();
-            //promptUserInput();
 
-            double gpaInput;
-            char optionInput;
-
-            int flag = 0;
-            int i;
-            char after;
-
-            do {
-                cout << "? ";
-                i = scanf("%c%lf", &optionInput, &gpaInput);
-                clearInputBuffer();
-
-                if (i == 1) {
-                    if (optionInput == '!') {
-                        flag = 1;
-                    }
-
-                }
-                else if (i == 2) {
-                    if (optionInput != '>' && optionInput != '<' && optionInput != '~' && optionInput != '!') {
-                        displayErrorMessage();
-                        clearInputBuffer();
-                    }
-                    else {
-                        printf("hello");
-                    }
-                }
-                
-                
-                
-                
-                /*
-                    if (optionInput == '>') {
-                        printf("%c%lf\n", optionInput, gpaInput);
-                    }
-                    else if (optionInput == '<') {
-                        printf("%c%lf\n", optionInput, gpaInput);
-                    }
-                    else if (optionInput == '~') {
-                        printf("%c%lf\n", optionInput, gpaInput);
-                    }
-                    else if (optionInput == '!') {
-                        flag = 1;
-                    }
-                    */
-            } while (flag == 0);
+            // THIS IS WHERE I SHOULD ASK FOR USER INPUTS: [OP][VALUE]
         }
 
         return numRecords;

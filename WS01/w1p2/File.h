@@ -15,16 +15,7 @@
 #include "GPA.h"
 
 namespace sdds {
-    /*
-    struct FileData {
-        double gpa;
-        int stno;
-        char name[116];
-    };
-    */
-
     int readRecord(FILE* fptr, GPA* gptr, int numRecords);
-    //void prnStudent(const GPA* gptr, FILE* fptr);
     int loadData(const char* filename, struct GPA* gptr, int numRecords);
 }
 #endif

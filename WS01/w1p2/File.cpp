@@ -22,10 +22,9 @@ namespace sdds {
         int rc = 0;
 
         do {
-            rc = fscanf(fptr, "%[^,],%d,%lf\n", gptr->name, &gptr->stno, &gptr->gpa);
+            rc = fscanf(fptr, "%[^,],%d,%lf\n", &gptr[i].name, &gptr[i].stno, &gptr[i].gpa);
 
             if (rc > 0) {
-                //saveRecord(gptr,);
                 i++;
             }
 
@@ -33,12 +32,6 @@ namespace sdds {
 
         return i;
     }
-/*
-    void saveRecird(const GPA* gptr, FILE* fptr) {
-        
-        fprintf(fptr, "%d: %0.1lf (%s)\n", gptr->stno, gptr->gpa, gptr->name);
-    }
-    */
 
     int loadData(const char* filename, struct GPA* gptr, int numRecords) {
         FILE* fptr;
