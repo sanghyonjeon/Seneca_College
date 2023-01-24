@@ -22,7 +22,7 @@ namespace sdds {
         int rc = 0;
 
         do {
-            rc = fscanf(fptr, "%[^,],%d,%lf\n", &gptr[i].name, &gptr[i].stno, &gptr[i].gpa);
+            rc = fscanf(fptr, "%[^,],%d,%lf\n", gptr[i].name, &gptr[i].stno, &gptr[i].gpa);
             
             if (rc > 0) {
                 i++;
@@ -48,7 +48,6 @@ namespace sdds {
 
     void sortDataAscend(struct GPA* gptr, int numRecords) {
         int i, j;
-        int swapComplete = 0;
         struct GPA temp[100] = { {0} };
 
         for (i = 0; i < numRecords - 1; i++) {
