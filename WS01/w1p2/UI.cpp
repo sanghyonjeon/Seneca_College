@@ -27,8 +27,4 @@ namespace sdds {
         cout << "value: GPA value" << endl;
         putchar('\n');
     }
-
-    /*
-    maybe another function here to scan the user's inputs here, instead of inside gpaQuery()
-    */
 }

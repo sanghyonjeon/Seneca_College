@@ -16,8 +16,5 @@
 namespace sdds {
     void displayPromptMessage();
     void displayErrorMessage();
-    /*
-    maybe another function here to scan the user's inputs here, instead of inside gpaQuery()
-    */
 }
 #endif

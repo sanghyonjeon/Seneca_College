@@ -23,11 +23,10 @@ namespace sdds {
 
         do {
             rc = fscanf(fptr, "%[^,],%d,%lf\n", &gptr[i].name, &gptr[i].stno, &gptr[i].gpa);
-
+            
             if (rc > 0) {
                 i++;
             }
-
         } while (rc > 0 && i < numRecords);
 
         return i;
@@ -58,10 +57,8 @@ namespace sdds {
                     temp[j] = gptr[j];
                     gptr[j] = gptr[j + 1];
                     gptr[j + 1] = temp[j];
+                }
             }
         }
-        }
-        
     }
-
 }

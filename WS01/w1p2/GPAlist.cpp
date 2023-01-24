@@ -42,6 +42,7 @@ namespace sdds {
 
             do {
                 j = 0;
+
                 cout << "? ";
                 cin >> operationInput;
 
@@ -91,7 +92,4 @@ namespace sdds {
 
         return numRecords;
     }
-
-
-
 }
