@@ -46,4 +46,22 @@ namespace sdds {
 
         return i;
     }
+
+    void sortDataAscend(struct GPA* gptr, int numRecords) {
+        int i, j;
+        int swapComplete = 0;
+        struct GPA temp[100] = { {0} };
+
+        for (i = 0; i < numRecords - 1; i++) {
+            for (j = 0; j < numRecords - 1; j++) {
+                if (gptr[j].stno > gptr[j + 1].stno) {
+                    temp[j] = gptr[j];
+                    gptr[j] = gptr[j + 1];
+                    gptr[j + 1] = temp[j];
+            }
+        }
+        }
+        
+    }
+
 }

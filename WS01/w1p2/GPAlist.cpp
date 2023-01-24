@@ -25,17 +25,68 @@ namespace sdds {
     }
 
     bool gpaQuery(const char* filename) {
-        int numRecords;
         struct GPA gptr[MAX_RECORDS] = { {0} };
+        double gpaInput;
+        int numRecords;
+        int i;
+        int j;
+        int flag = 0;
+        char operationInput;
+        char confirmExit;
         
         numRecords = loadData(filename, gptr, MAX_RECORDS);
+        sortDataAscend(gptr, numRecords);
 
         if (numRecords) {
-            //Test purposes
-            //printf("% s, % d, % lf\n", gptr[1].name, gptr[1].stno, gptr[1].gpa);
             displayPromptMessage();
 
-            // THIS IS WHERE I SHOULD ASK FOR USER INPUTS: [OP][VALUE]
+            do {
+                j = 0;
+                cout << "? ";
+                cin >> operationInput;
+
+                switch (operationInput) {
+                case '<':
+                    cin >> gpaInput;
+                    for (i = 0; i < numRecords; i++) {
+                        if (gptr[i].gpa < gpaInput) {
+                            j++;
+                            printf("[%d] %d: %.1lf (%s)\n", j, gptr[i].stno, gptr[i].gpa, gptr[i].name);
+                        }
+                    }
+                    break;
+                case '>':
+                    cin >> gpaInput;
+                    for (i = 0; i < numRecords; i++) {
+                        if (gptr[i].gpa > gpaInput) {
+                            j++;
+                            printf("[%d] %d: %.1lf (%s)\n", j, gptr[i].stno, gptr[i].gpa, gptr[i].name);
+                        }
+                    }
+                    break;
+                case '~':
+                    cin >> gpaInput;
+                    for (i = 0; i < numRecords; i++) {
+                        if (gpaInput - 0.05 < gptr[i].gpa && gpaInput + 0.05 > gptr[i].gpa) {
+                            j++;
+                            printf("[%d] %d: %.1lf (%s)\n", j, gptr[i].stno, gptr[i].gpa, gptr[i].name);
+                        }
+                    }
+                    break;
+                case '!':
+                    clearInputBuffer();
+                    printf("Exit the program? (Y)es/(N)o: ");
+                    cin >> confirmExit;
+                    
+                    if (confirmExit == 'y' || confirmExit == 'Y') {
+                        flag = 1;
+                    }
+                    break;
+                default:
+                    clearInputBuffer();
+                    displayErrorMessage();
+                }
+            } while (flag == 0);
         }
 
         return numRecords;

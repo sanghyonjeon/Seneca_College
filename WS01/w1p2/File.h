@@ -17,5 +17,6 @@
 namespace sdds {
     int readRecord(FILE* fptr, GPA* gptr, int numRecords);
     int loadData(const char* filename, struct GPA* gptr, int numRecords);
+    void sortDataAscend(struct GPA* gptr, int numRecords);
 }
 #endif
