@@ -14,11 +14,77 @@
 #include <iostream>
 #include "GPAlist.h"
 #include "File.h"
+#include "UI.h"
+#define MAX_RECORDS 100
 using namespace std;
 
 namespace sdds {
-    bool gpaQuery(const char* filename) {
-        return openFile(filename);
+    void clearInputBuffer(void)
+    {
+        while (getchar() != '\n');
     }
+
+    bool gpaQuery(const char* filename) {
+        int numRecords;
+        struct GPA gptr[MAX_RECORDS] = { {0} };
+        
+        numRecords = loadData(filename, gptr, MAX_RECORDS);
+
+        if (numRecords) {
+            displayPromptMessage();
+            //promptUserInput();
+
+            double gpaInput;
+            char optionInput;
+
+            int flag = 0;
+            int i;
+            char after;
+
+            do {
+                cout << "? ";
+                i = scanf("%c%lf", &optionInput, &gpaInput);
+                clearInputBuffer();
+
+                if (i == 1) {
+                    if (optionInput == '!') {
+                        flag = 1;
+                    }
+
+                }
+                else if (i == 2) {
+                    if (optionInput != '>' && optionInput != '<' && optionInput != '~' && optionInput != '!') {
+                        displayErrorMessage();
+                        clearInputBuffer();
+                    }
+                    else {
+                        printf("hello");
+                    }
+                }
+                
+                
+                
+                
+                /*
+                    if (optionInput == '>') {
+                        printf("%c%lf\n", optionInput, gpaInput);
+                    }
+                    else if (optionInput == '<') {
+                        printf("%c%lf\n", optionInput, gpaInput);
+                    }
+                    else if (optionInput == '~') {
+                        printf("%c%lf\n", optionInput, gpaInput);
+                    }
+                    else if (optionInput == '!') {
+                        flag = 1;
+                    }
+                    */
+            } while (flag == 0);
+        }
+
+        return numRecords;
+    }
+
+
 
 }

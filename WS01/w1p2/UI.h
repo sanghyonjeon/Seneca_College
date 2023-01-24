@@ -14,6 +14,8 @@
 #define SDDS_UI_H
 
 namespace sdds {
-
+    void displayPromptMessage();
+    void displayErrorMessage();
+    //void promptUserInput();
 }
 #endif

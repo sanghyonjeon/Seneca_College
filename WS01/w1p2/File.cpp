@@ -17,19 +17,40 @@
 using namespace std;
 
 namespace sdds {
-    int readStudent(GPA* gptr, FILE* fptr) {
-        return fscanf(fptr, "%[^,],%d,%lf\n", gptr->name, &gptr->stno, &gptr->gpa) == 3;
-    }
+    int readRecord(FILE* fptr, GPA* gptr, int numRecords) {
+        int i = 0;
+        int rc = 0;
 
-    /*
-    void prnStudent(const GPA* gptr, FILE* fptr) {
+        do {
+            rc = fscanf(fptr, "%[^,],%d,%lf\n", gptr->name, &gptr->stno, &gptr->gpa);
+
+            if (rc > 0) {
+                //saveRecord(gptr,);
+                i++;
+            }
+
+        } while (rc > 0 && i < numRecords);
+
+        return i;
+    }
+/*
+    void saveRecird(const GPA* gptr, FILE* fptr) {
+        
         fprintf(fptr, "%d: %0.1lf (%s)\n", gptr->stno, gptr->gpa, gptr->name);
     }
     */
 
-    int openFile(const char* filename) {
+    int loadData(const char* filename, struct GPA* gptr, int numRecords) {
         FILE* fptr;
+        int i = 0;
+
         fptr = fopen(filename, "r");
-        return bool(fptr);
+
+        if (fptr) {
+            i = readRecord(fptr, gptr, numRecords);
+            fclose(fptr);
+        }
+
+        return i;
     }
 }

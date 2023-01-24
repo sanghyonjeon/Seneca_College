@@ -13,13 +13,47 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include "UI.h"
+#include "File.h"
 using namespace std;
 
 namespace sdds {
-    void displayPrompt() {
+    void displayPromptMessage() {
         cout << "Enter GPA query..." << endl;
-        return;
     }
 
-    
+    void displayErrorMessage() {
+        cout << "Syntax error: ? [Op][value]<ENTER>" << endl;
+        cout << "Op: [>,<,~,!]" << endl;
+        cout << "value: GPA value" << endl;
+        putchar('\n');
+    }
+
+    /*
+    void promptUserInput() {
+        double gpaInput;
+        char optionInput;
+
+        int flag = 0;
+
+        do {
+            cout << "? ";
+            scanf("%c%lf", &optionInput, &gpaInput);
+
+            if (optionInput == '>') {
+                printf("%c%lf", optionInput, gpaInput);
+            }
+            else if (optionInput == '<') {
+                printf("%c%lf", optionInput, gpaInput);
+            }
+            else if (optionInput == '~') {
+                printf("%c%lf", optionInput, gpaInput);
+            }
+            else if (optionInput == '!') {
+                flag = 1;
+            }
+            else {
+                displayErrorMessage();
+            }
+        } while (!flag);
+    }*/
 }
