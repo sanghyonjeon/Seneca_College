@@ -1,3 +1,16 @@
+/*
+*****************************************************************************
+                          Workshop - #2 (Part-1)
+Full Name  : Sang Hyon Jeon
+Student ID#: 1123552194
+Email      : shjeon5@myseneca.ca
+Section    : NBB
+
+Authenticity Declaration:
+I have done all the coding by myself and only copied the code that my
+professor provided to complete my workshops and assignments.
+*****************************************************************************
+*/
 #define _CRT_SECURE_NO_WARNINGS
 #include <cstdio>
 #include "Tools.h"
@@ -23,25 +36,26 @@ namespace sdds {
 
     // To Do: read functions (4 overloaded read functions)
     
-    /*   
-
-    int read(...............) {
-        return .............; 
+    char* read(FILE* fp) {
+        char* packageName = new char[60];
+        fscanf(fp, "%60[^\n]\n", packageName);
+        return packageName;
     }
 
-    int read(...............) {
-        return .............;
+    
+    bool read(int &user_id, int &dayofyear, int &Fwifitime, int &Fctime, FILE* fp) {
+        return fscanf(fp, "%d,%d,%d,%d", &user_id, &dayofyear, &Fwifitime, &Fctime) == 4;
     }
 
-    int read(..............) {
-        return .............;
+    double& read(double &timeinhours, FILE* fp) {
+        fscanf(fp, "%lf,", &timeinhours);
+        return timeinhours;
     }
 
-    int read(..............) {
-        return ............; 
+    char& read(char &dayofweek, FILE* fp) {
+        fscanf(fp, "%[^ \t\n\r\v\f,]%*c", &dayofweek);
+        return dayofweek; 
     }
-
-    */
 
     void closefile() { // Fully provided
         if (fp) fclose(fp);

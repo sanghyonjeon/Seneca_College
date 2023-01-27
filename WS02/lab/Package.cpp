@@ -1,3 +1,16 @@
+/*
+*****************************************************************************
+                          Workshop - #2 (Part-1)
+Full Name  : Sang Hyon Jeon
+Student ID#: 1123552194
+Email      : shjeon5@myseneca.ca
+Section    : NBB
+
+Authenticity Declaration:
+I have done all the coding by myself and only copied the code that my
+professor provided to complete my workshops and assignments.
+*****************************************************************************
+*/
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <cstring>
@@ -16,27 +29,40 @@ namespace sdds {
         if (openFile_r(filename_r)) {
 
             // Add [1]: Set the noOfTraces to the number of records found in the file.
-            
+            no_of_traces = noOfTraces();
                                    
             // Add [2]: Dynamically allocate an array of Customers into the global Customers' pointer (users) with the size of no_of_traces.
-            
+            users = new Customers[no_of_traces];
 
             // Add [3]: Load the Customers' records from the file into the dynamically created array (use a loop).
+            FILE* fp = fopen(filename_r, "r");
+            int rc;
+            int numRecords = 0;
+            for (i = 0; i < no_of_traces; i++) {
+                Customers* tempUser = { {0} };
+                rc = fscanf(fp, "%[^ \t\n\r\v\f,]%*c,%d,%lf,%d,%d,%d,%s", &tempUser[i].dayofweek, &tempUser[i].user_id, &tempUser[i].timeinhours, &tempUser[i].dayofyear, &tempUser[i].Fwifitime, &tempUser[i].Fctime, tempUser[i].Package_Name);
 
+                if (rc > 0) {
+                    numRecords++;
+                }
+
+                tempUser[i] = users[i];
+            }
            
 
             // Add [4]: If the number of the records does not match the number of read ones, print an error message
-            if (...................) {
+            if (no_of_traces != numRecords) {
                 cout << "Error reading the records, Check the data file "<< endl;
-                
+                check = false;
             }
             else {
              
             // Add [5]: set  check to true 
-                
+                check = true;
             }
 
             // Add [6]: close the file; call closefile() function
+            closefile();
 
         }
         else {
@@ -47,7 +73,7 @@ namespace sdds {
 
 
 
-
+    /*
     // Add: Complete the implementation of the one argument [int loadTraces(Customers& user_info)] function that does the following:
                                                   // (1). reads one student record from the file
                                                   // (2). loads the record into the customers' reference
@@ -72,6 +98,7 @@ namespace sdds {
         }
         return check; 
     }
+    */
 
     
     void grouptTraces() {  // Fully provided
@@ -90,12 +117,21 @@ namespace sdds {
 
 
     // ADD [1]: implement the display function based on the following condition: (timeinhours > 1.0 and dayofweek == 'F') 
+    void display() {
+        int i;
 
+        for (i = 0;  &users[i].dayofweek == "F"; i++) {
+            printf("hi");
+            cout << users[i].user_id << users[i].timeinhours << users[i].Fctime << users[i].Fwifitime << users[i].Package_Name;
+        }
+    };
 
          
     
     // ADD [2]: implement the deallocateMemory function  
-
+    void deallocateMemory() {
+        return;
+    };
         
 
 }
