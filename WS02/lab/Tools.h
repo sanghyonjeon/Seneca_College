@@ -19,18 +19,12 @@ namespace sdds {
 	void closefile(); // Provided
 	int noOfTraces(); // Provided
 
-	// ADD: Declare read prototypes (4 prototypes)
-
-	char* read(FILE* fp);
-	bool read(int& user_id, int& dayofyear, int& Fwifitime, int& Fctime, FILE* fp);
-	double& read(double& timeinhours, FILE* fp);
-	char& read(char& dayofweek, FILE* fp);
-
-
-
-
+	int read(char Package_Name[]); // Return a Cstring argument to send back the name of the Package.
+	int read(int& int_number); // Return a reference argument to an int to pass back the user_id, dayofyear, Fwifitime and Fctime.
+	int read(double& timeinhours); // Return a reference argument to a double to pass back the timeinhours.
+	int read(char& dayofweek); // Return a reference argument to a char to pass back the dayofweek.
 
 	void strCpy(char* des, const char* src); // Provided
 	int strLen(const char* s); // Provided
 }
-#endif 
+#endif

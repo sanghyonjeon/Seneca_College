@@ -32,29 +32,25 @@ namespace sdds {
         rewind(fp);
         return noOfTraces;
     }
-    
 
-    // To Do: read functions (4 overloaded read functions)
-    
-    char* read(FILE* fp) {
-        char* packageName = new char[60];
-        fscanf(fp, "%60[^\n]\n", packageName);
-        return packageName;
+    // Return a Cstring argument to send back the name of the Package.
+    int read(char Package_Name[]) {
+        return fscanf(fp, "%60[^\n]\n", Package_Name) == 1;
     }
 
-    
-    bool read(int &user_id, int &dayofyear, int &Fwifitime, int &Fctime, FILE* fp) {
-        return fscanf(fp, "%d,%d,%d,%d", &user_id, &dayofyear, &Fwifitime, &Fctime) == 4;
+    // Return a reference argument to an int to pass back the user_id, dayofyear, Fwifitime and Fctime.
+    int read(int& int_number) {
+        return fscanf(fp, "%d,", &int_number) == 1;
     }
 
-    double& read(double &timeinhours, FILE* fp) {
-        fscanf(fp, "%lf,", &timeinhours);
-        return timeinhours;
+    // Return a reference argument to a double to pass back the timeinhours.
+    int read(double& timeinhours) {
+        return fscanf(fp, "%lf,", &timeinhours) == 1;
     }
 
-    char& read(char &dayofweek, FILE* fp) {
-        fscanf(fp, "%[^ \t\n\r\v\f,]%*c", &dayofweek);
-        return dayofweek; 
+    // Return a reference argument to a char to pass back the dayofweek.
+    int read(char& dayofweek) {
+        return fscanf(fp, "%[^ \t\n\r\v\f,]%*c", &dayofweek);
     }
 
     void closefile() { // Fully provided

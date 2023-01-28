@@ -20,48 +20,37 @@ professor provided to complete my workshops and assignments.
 using namespace std;
 namespace sdds {
     int no_of_traces;
-    Customers* users;
+    Customers* users = nullptr;
     
-    // Add: Complete the implementation of the no argument [int loadTraces()] function
-    int loadTraces() {       // Do: complete the missing parts as guided (6 parts)
+    // Load all the users records into the Customers array, and return a bool for success.
+    int loadTraces() {
         bool check = true;
         int i = 0;
+
         if (openFile_r(filename_r)) {
 
-            // Add [1]: Set the noOfTraces to the number of records found in the file.
+            // Set the noOfTraces to the number of records found in the file.
             no_of_traces = noOfTraces();
                                    
-            // Add [2]: Dynamically allocate an array of Customers into the global Customers' pointer (users) with the size of no_of_traces.
-            users = new Customers[no_of_traces];
+            // Dynamically allocate an array of Customers into the global Customers' pointer (users) with the size of no_of_traces.
+            users = new Customers[no_of_traces + 1];
 
-            // Add [3]: Load the Customers' records from the file into the dynamically created array (use a loop).
-            FILE* fp = fopen(filename_r, "r");
-            int rc;
-            int numRecords = 0;
+            // Load the Customers' records from the file into the dynamically created array (use a loop).
             for (i = 0; i < no_of_traces; i++) {
-                Customers* tempUser = { {0} };
-                rc = fscanf(fp, "%[^ \t\n\r\v\f,]%*c,%d,%lf,%d,%d,%d,%s", &tempUser[i].dayofweek, &tempUser[i].user_id, &tempUser[i].timeinhours, &tempUser[i].dayofyear, &tempUser[i].Fwifitime, &tempUser[i].Fctime, tempUser[i].Package_Name);
 
-                if (rc > 0) {
-                    numRecords++;
-                }
-
-                tempUser[i] = users[i];
+                loadTraces(users[i]);
             }
-           
 
-            // Add [4]: If the number of the records does not match the number of read ones, print an error message
-            if (no_of_traces != numRecords) {
-                cout << "Error reading the records, Check the data file "<< endl;
-                check = false;
+            // If the number of the records does not match the number of read ones, print an error message.
+            if (i != no_of_traces) {
+                cout << "Error reading the records, Check the data file " << endl;
             }
             else {
-             
-            // Add [5]: set  check to true 
+             // Set check to true.
                 check = true;
             }
 
-            // Add [6]: close the file; call closefile() function
+            // Close the file; call closefile() function.
             closefile();
 
         }
@@ -71,35 +60,24 @@ namespace sdds {
         return check;
     }  
 
-
-
-    /*
-    // Add: Complete the implementation of the one argument [int loadTraces(Customers& user_info)] function that does the following:
-                                                  // (1). reads one student record from the file
-                                                  // (2). loads the record into the customers' reference
-   
-    int loadTraces(Customers& user_info) {    // Do: complete the missing parts as guided (3 parts)
+    int loadTraces(Customers& user_info) {
         bool check = false;
         char read_Package_name[50];
 
         if (read(user_info.dayofweek)&& read(user_info.user_id) && read(user_info.timeinhours) && read(user_info.dayofyear) && read(user_info.Fwifitime)  
             && read(user_info.Fctime) && read(read_Package_name)) { // if reading of data
 
-           // Add [1]: allocate memory to the size of the Package_name + 1, keep its address in the name of the customers reference (user_info.Package_Name)
+           // Allocate memory to the size of the Package_name + 1, while keeping its address in the name of the customers reference (user_info.Package_Name)
+            user_info.Package_Name = new char[strLen(read_Package_name) + 1];
 
-            
+           // Copy the name into the newly allocated memory, using provided strCpy function
+            strCpy(user_info.Package_Name, read_Package_name);
 
-           // Add [2]:  copy the name into the newly allocated memory, use provided strCpy function
-            
-
-
-           // Add [3]: set  check to true if the previous process is successfully completed
-                        
+           // Set check to true if the previous process is successfully completed
+            check = true;
         }
         return check; 
     }
-    */
-
     
     void grouptTraces() {  // Fully provided
         int i, j;
@@ -113,27 +91,29 @@ namespace sdds {
                 }
             }
         }
-    } 
+    }
 
-
-    // ADD [1]: implement the display function based on the following condition: (timeinhours > 1.0 and dayofweek == 'F') 
+    // Display all customer record(s) whose spent time is greater than 1 hour, and day of week is Friday.
     void display() {
         int i;
 
-        for (i = 0;  &users[i].dayofweek == "F"; i++) {
-            printf("hi");
-            cout << users[i].user_id << users[i].timeinhours << users[i].Fctime << users[i].Fwifitime << users[i].Package_Name;
+        for (i = 0; i < no_of_traces; i++) {
+            if ((users[i].timeinhours > 1.0) && (users[i].dayofweek == 'F')) {
+                cout << users[i].user_id << "," << users[i].timeinhours << "," << users[i].Fctime << "," << users[i].Fwifitime << "," << users[i].Package_Name << endl;
+            }
         }
-    };
-
-         
+    }
     
-    // ADD [2]: implement the deallocateMemory function  
-    void deallocateMemory() {
-        return;
-    };
-        
+    // (1). Deallocate all the Package names in the customer (users) elements,
+    // (2). Deallocate the users array 
+    void deallocateMemory(void) {
+        int i;
 
+        for (i = 0; i < no_of_traces; i++) {
+            delete[] users[i].Package_Name;
+        }
+        delete[] users;
+    }
 }
 
 
