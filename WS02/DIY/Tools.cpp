@@ -12,6 +12,7 @@ professor provided to complete my workshops and assignments.
 *****************************************************************************
 */
 #define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
 #include "Tools.h"
 
 namespace sdds {
@@ -20,5 +21,9 @@ namespace sdds {
          *str1++ = *str2++;
       }
       *str1 = 0;
+   }
+
+   void clearInputBuffer(void) {
+       while (getchar() != '\n');
    }
 }

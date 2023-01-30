@@ -18,6 +18,8 @@ professor provided to complete my workshops and assignments.
 
 namespace sdds {
 	void strCpy(char* des, const char* src);
+
+	void clearInputBuffer(void);
 }
 #endif 
 

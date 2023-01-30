@@ -50,7 +50,7 @@ namespace sdds {
         char entered_share_videos;
 
         int flag;
-
+        
         cout << "Enter User name: ";
 
         if (cin.peek() == '\n') {
@@ -76,6 +76,7 @@ namespace sdds {
             cin >> entered_share_videos;
             rec.share_videos = entered_share_videos;
 
+            clearInputBuffer();
             flag = 1;
         }
         return flag;
@@ -91,9 +92,22 @@ namespace sdds {
 
     // Adds a Customer to the dynamically allocated memory of customers in CustomersRecord
     void addCustomer(CustomersRecord& t_rec, const Customers& c_rec) {
-        
-        t_rec.ptr_rec[t_rec.noOfRecords] = c_rec;
+        Customers* temp_customers = nullptr;
+
+        temp_customers = new Customers[t_rec, t_rec.noOfRecords + 1];
+
+        temp_customers->likes_count = c_rec.likes_count;
+        temp_customers->replies_count = c_rec.replies_count;
+        temp_customers->retweets_count = c_rec.retweets_count;
+        temp_customers->share_videos = c_rec.share_videos;
+        strcpy(temp_customers->user_name, c_rec.user_name);
+
+
+
+        t_rec.ptr_rec = temp_customers;
         t_rec.noOfRecords += 1;
+
+        //delete[] temp_customers;
     }
 
     // Prints the Customer information
