@@ -47,7 +47,7 @@ namespace sdds {
         char entered_share_videos;
 
         int flag;
-        
+
         cout << " Enter User name: ";
 
         if (cin.peek() == '\n') {
@@ -97,8 +97,8 @@ namespace sdds {
         }
 
         temp_customer[i] = c_rec;
-        t_rec.noOfRecords++;
         delete[] t_rec.ptr_rec;
+        t_rec.noOfRecords++;
         t_rec.ptr_rec = temp_customer;
     }
 
@@ -108,7 +108,7 @@ namespace sdds {
             << c_rec.likes_count << ", "
             << c_rec.retweets_count << ", "
             << c_rec.replies_count << ", "
-            << c_rec.share_videos << "\n";
+            << c_rec.share_videos << "\n\n";
     }
 
     // Prints a row number with a period before each user name. Then, it prints all the customers' records.
@@ -118,5 +118,5 @@ namespace sdds {
             display(t_rec.ptr_rec[i]);
         }
     }
-  }
+}
 
