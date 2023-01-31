@@ -32,7 +32,7 @@ namespace sdds {
     void EmptyRecord(Customers& customer);
 
     // Sets CustomersRecord data members to an empty state
-    void EmptyRecord(CustomersRecord& record);
+    void EmptyRecord(CustomersRecord& records);
 
     // Prompts for user name. If user name is entered, prompt Customer data and return True.
     // If user enters an empty value, return false.

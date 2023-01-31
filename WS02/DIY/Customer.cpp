@@ -23,22 +23,19 @@ using namespace std;
 namespace sdds {
     // Sets Customer data members to an empty state
     void EmptyRecord(Customers& customer) {
-        for (int i = 0; i < MAX_NAME_LENGTH; i++) {
-            customer.user_name[i] = 0;
-        }
-        customer.retweets_count = 0;
+        strCpy(customer.user_name, "");
         customer.likes_count = 0;
         customer.replies_count = 0;
+        customer.retweets_count = 0;
         customer.share_videos = '\0';
-    }
+    };
 
     // Sets CustomersRecord data members to an empty state
-    void EmptyRecord(CustomersRecord& record) {
-        for (int i = 0; i < record.noOfRecords; i++) {
-            EmptyRecord(record.ptr_rec[i]);
-        }
-        record.noOfRecords = 0;
-    }
+    void EmptyRecord(CustomersRecord& records) {
+        records.ptr_rec = nullptr;
+        records.noOfRecords = 0;
+    };
+
 
     // Prompts for user name. If user name is entered, prompt Customer data and return True.
     // If user enters an empty value, return false.
@@ -51,7 +48,7 @@ namespace sdds {
 
         int flag;
         
-        cout << "Enter User name: ";
+        cout << " Enter User name: ";
 
         if (cin.peek() == '\n') {
             flag = 0;
@@ -60,19 +57,19 @@ namespace sdds {
             cin.getline(entered_user_name, MAX_NAME_LENGTH);
             strCpy(rec.user_name, entered_user_name);
 
-            cout << "Enter likes_count: ";
+            cout << " Enter likes_count: ";
             cin >> entered_likes_count;
             rec.likes_count = entered_likes_count;
 
-            cout << "Enter retweets_count: ";
+            cout << " Enter retweets_count: ";
             cin >> entered_retweets_count;
             rec.retweets_count = entered_retweets_count;
 
-            cout << "Enter replies_count: ";
+            cout << " Enter replies_count: ";
             cin >> entered_replies_count;
             rec.replies_count = entered_replies_count;
 
-            cout << "Enter share videos (y/n): ";
+            cout << " Enter share videos (y/n): ";
             cin >> entered_share_videos;
             rec.share_videos = entered_share_videos;
 
@@ -97,13 +94,6 @@ namespace sdds {
         
         for (i = 0; i < t_rec.noOfRecords; i++) {
             temp_customer[i] = t_rec.ptr_rec[i];
-        }
-
-        if (t_rec.noOfRecords == 1) {
-            delete t_rec.ptr_rec;
-        }
-        if (t_rec.noOfRecords > 1) {
-            delete[] t_rec.ptr_rec;
         }
 
         temp_customer[i] = c_rec;
