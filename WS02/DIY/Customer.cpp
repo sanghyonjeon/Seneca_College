@@ -91,13 +91,14 @@ namespace sdds {
     void addCustomer(CustomersRecord& t_rec, const Customers& c_rec) {
         int i;
         Customers* temp_customer = new Customers[t_rec.noOfRecords + 1];
-        
+
         for (i = 0; i < t_rec.noOfRecords; i++) {
             temp_customer[i] = t_rec.ptr_rec[i];
         }
 
         temp_customer[i] = c_rec;
         t_rec.noOfRecords++;
+        delete[] t_rec.ptr_rec;
         t_rec.ptr_rec = temp_customer;
     }
 
