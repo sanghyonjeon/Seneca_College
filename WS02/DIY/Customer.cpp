@@ -92,22 +92,23 @@ namespace sdds {
 
     // Adds a Customer to the dynamically allocated memory of customers in CustomersRecord
     void addCustomer(CustomersRecord& t_rec, const Customers& c_rec) {
-        Customers* temp_customers = nullptr;
+        int i;
+        Customers* temp_customer = new Customers[t_rec.noOfRecords + 1];
+        
+        for (i = 0; i < t_rec.noOfRecords; i++) {
+            temp_customer[i] = t_rec.ptr_rec[i];
+        }
 
-        temp_customers = new Customers[t_rec, t_rec.noOfRecords + 1];
+        if (t_rec.noOfRecords == 1) {
+            delete t_rec.ptr_rec;
+        }
+        if (t_rec.noOfRecords > 1) {
+            delete[] t_rec.ptr_rec;
+        }
 
-        temp_customers->likes_count = c_rec.likes_count;
-        temp_customers->replies_count = c_rec.replies_count;
-        temp_customers->retweets_count = c_rec.retweets_count;
-        temp_customers->share_videos = c_rec.share_videos;
-        strcpy(temp_customers->user_name, c_rec.user_name);
-
-
-
-        t_rec.ptr_rec = temp_customers;
-        t_rec.noOfRecords += 1;
-
-        //delete[] temp_customers;
+        temp_customer[i] = c_rec;
+        t_rec.noOfRecords++;
+        t_rec.ptr_rec = temp_customer;
     }
 
     // Prints the Customer information
@@ -116,7 +117,7 @@ namespace sdds {
             << c_rec.likes_count << ", "
             << c_rec.retweets_count << ", "
             << c_rec.replies_count << ", "
-            << c_rec.share_videos << "\n ";
+            << c_rec.share_videos << "\n";
     }
 
     // Prints a row number with a period before each user name. Then, it prints all the customers' records.
