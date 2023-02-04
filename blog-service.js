@@ -26,7 +26,7 @@ function getAllPosts() {
   });
 }
 
-function getJPublishedPosts() {
+function getPublishedPosts() {
   return new Promise(function (resolve, reject) {
     var publishedPosts = posts.filter((post) => post.published === true);
     if (publishedPosts.length === 0) return reject("no results returned");
@@ -40,3 +40,5 @@ function getCategories() {
     resolve(categories);
   });
 }
+
+module.exports = { initialize, getAllPosts, getPublishedPosts, getCategories };
