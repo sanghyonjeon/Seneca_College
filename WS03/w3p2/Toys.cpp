@@ -14,7 +14,6 @@ professor provided to complete my workshops and assignments.
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <cstring>
-#include <iomanip>
 #include "Toys.h"
 
 using namespace std;
@@ -64,20 +63,33 @@ namespace sdds {
             cout << "Invalid Toy" << endl;
         }
         else {
-            cout << left << setw(15) << m_tname;
-            cout << setw(10) << m_sku;
-            cout << setw(6) << m_age;
-            cout << fixed << setprecision(2) << setw(12) << m_price;
+            cout.width(15);
+            cout.setf(ios::left);
+            cout << m_tname;
+            cout.unsetf(ios::left);
+            cout.width(10);
+            cout << m_sku;
+            cout.width(6);
+            cout << m_age;
+            cout.width(12);
+            cout.precision(4);
+            cout << m_price;
             if (m_onSale) {
-                cout << setw(10) << "On Sale" << endl;
+                cout.width(11);
+                cout << "On Sale " << endl;
             }
             else {
-                cout << setw(8) << endl;
+                cout.width(8);
+                cout << " " << endl;
             }
         }
     }
 
     int Toys::getSku() const {
         return m_sku;
+    }
+
+    bool Toys::setOnSale(bool onSale) {
+        return m_onSale = onSale;
     }
 }

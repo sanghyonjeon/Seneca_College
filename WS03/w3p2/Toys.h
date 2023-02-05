@@ -32,6 +32,7 @@ namespace sdds {
         void display() const;
 
         int getSku() const;
+        bool setOnSale(bool onSale);
     };
 }
 

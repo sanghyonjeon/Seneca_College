@@ -14,7 +14,6 @@ professor provided to complete my workshops and assignments.
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <cstring>
-#include <iomanip>
 #include "Store.h"
 #include "Toys.h"
 
@@ -50,12 +49,24 @@ namespace sdds {
 
 	void Store::display() const {
 		if (m_noOfToys > 0) {
-			cout << setfill('*') << setw(60) << "*" << endl;
+			cout.fill('*');
+			cout.width(60);
+			cout << "*" << endl;
 			cout << m_sName << endl;
-			cout << setfill('*') << setw(60) << "*" << endl;
+			cout.width(60);
+			cout << "*" << endl;
 			cout << "list of the toys" << endl;
-			cout << setfill(' ') << setw(30) << "SKU" << setw(10) << "Age" << setw(11) << "Price" << setw(10) << "Sale" << endl;
+			cout.fill(' ');
+			cout.width(30);
+			cout << "SKU";
+			cout.width(10);
+			cout << "Age";
+			cout.width(11);
+			cout << "Price";
+			cout.width(10);
+			cout << "Sale" << endl;
 			for (int i = 0; i < m_noOfToys; i++) {
+				cout << "Toy[" << i + 1 << "] :";
 				m_toy[i].display();
 			}
 		}
@@ -66,8 +77,8 @@ namespace sdds {
 
 	void Store::find(int sku) {
 		for (int i = 0; i < m_addToys; i++) {
-			if (m_toy[i].m_sku == sku) {
-				m_toy[i].m_onSale = true;
+			if (m_toy[i].getSku() == sku) {
+				m_toy[i].setOnSale(true);
 				m_toy[i].calSale();
 			}
 		}
