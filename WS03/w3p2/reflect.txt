@@ -1,0 +1,56 @@
+/***********************************************************************
+                          Workshop - #3 (Part-2)
+// Full Name  : Sang Hyon Jeon
+// Student ID#: 1123552194
+// Email      : shjeon5@myseneca.ca
+// Section    : NBB
+// Date       : February 6, 2023
+//
+// Authenticity Declaration:
+// I have done all the coding by myself and only copied the code that my
+// professor provided to complete my workshops and assignments.
+***********************************************************************/
+In this workshop, we learned about defining a class type, privatizing
+data within a class, instantiating objects of class type, and using
+member functions to query and change the state of an object.
+
+The first topic we covered was defining a class type. A class is like a
+blueprint or a template for creating objects. The class is used to
+define data members and member functions which can be used to manipulate
+the data members. For instance, in the workshop, we defined a class
+called "Toys" which had data members like "m_sName" (name of the toy),
+"m_noOfToys" (number of toys) and "m_addToys" (number of toys added).
+
+The second topic we covered was privatizing data within the class. This
+was done using the keyword "private" which restricts access to the data
+members of the class to only the member functions of the class. This
+helps in encapsulating the data within the class and preventing the data
+from being manipulated by code outside the class.
+
+The third topic was instantiating an object of class type. An object is
+an instance of a class and can be created by declaring a variable of the
+class type. For example, in the workshop, we created an object of the
+class Toy called "Toys".
+
+The fourth topic we covered was using member functions to query the
+state of an object. This was done by creating member functions within
+the class which can be used to retrieve the values of the data members.
+For example, in the workshop, we created a "getter" member function
+called "getSku" which returned the value of "m_sku". A similar example
+is the setter function called "setOnSale", which set the value of
+"m_onSale" to "true" if the sku had matched.
+
+Finally, the fifth topic was using member functions to change the state
+of an object. This was done by creating member functions within the class
+which can be used to modify the values of the data members. For example,
+in the workshop, we created a member function called "addToys" which
+set the received values to the appropriate data members after validating.
+
+Although each topic had its own challegning aspects, the most memorable
+struggle of this workshop for me, was the formatting. Use of <iostream>
+library functions such as setf(), unsetf(), width() had caused me a lot
+of stress due to the outputs not matching exactly.
+
+In conclusion, the topics covered in this workshop provided a solid
+foundation for understanding the basics of object-oriented programming
+in C++ and how to create and use classes to represent real-world entities.

@@ -1,5 +1,5 @@
 /***********************************************************************
-                          Workshop - #1 (Part-2)
+                          Workshop - #2 (Part-2)
 // Full Name  : Sang Hyon Jeon
 // Student ID#: 1123552194
 // Email      : shjeon5@myseneca.ca
