@@ -25,10 +25,13 @@ namespace sdds {
         bool m_onSale; // Keep tracks of whether toys are on sale or not
 
     public:
+        Toys();
         void addToys(const char* tname, int sku, double price, int age);
         void isSale(bool sale);
         void calSale();
         void display() const;
+
+        int getSku() const;
     };
 }
 

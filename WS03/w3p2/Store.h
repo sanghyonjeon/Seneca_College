@@ -23,9 +23,9 @@ namespace sdds {
 	class Store {
 		Toys m_toy[MAX_NUM_TOYS]; // Static array of toys with size MAX_NUM_TOYS
 		char m_sName[MAX_SNAME]; // Store name, up to MAX_SNAME size
-		int m_noOfToys; //Number of toys;
+		int m_noOfToys; //Number of toys
 		int m_addToys; // Number of toys added
-		
+
 	public:
 		Store();
 		void setStore(const char* sName, int no);

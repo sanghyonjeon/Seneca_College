@@ -19,23 +19,33 @@ professor provided to complete my workshops and assignments.
 
 using namespace std;
 
-namespace sdds
-{
+namespace sdds {
+    Toys::Toys() {
+        m_tname[0] = '\0';
+        m_sku = 0;
+        m_price = 0;
+        m_age = 0;
+        m_onSale = false;
+    }
+
     void Toys::addToys(const char* tname, int sku, double price, int age) {
-        if (tname == nullptr || tname[0] == '\0' || strlen(tname) >= MAX_TNAME ||
-            sku >= 100000000 || sku < 10000000 || price < 0 ||
-            age < 0) {
-            *m_tname = '\0';
-            m_sku = 0;
-            m_price = 0;
-            m_age = 0;
-            m_onSale = false;
-        }
-        else {
+        if (tname != nullptr
+            && sku >= 10000000 
+            && sku <= 99999999 
+            && price >= 0 
+            && age >= 0){
             strcpy(m_tname, tname);
             m_sku = sku;
             m_price = price;
             m_age = age;
+            m_onSale = false;
+        }
+        else {
+            m_tname[0] = '\0';
+            m_sku = 0;
+            m_price = 0;
+            m_age = 0;
+            m_onSale = false;
         }
     }
 
@@ -65,5 +75,9 @@ namespace sdds
                 cout << setw(8) << endl;
             }
         }
+    }
+
+    int Toys::getSku() const {
+        return m_sku;
     }
 }
