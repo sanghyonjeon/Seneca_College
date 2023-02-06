@@ -15,7 +15,7 @@
 ***********************************************************************/
 #include<iostream>
 #include"Tournament.h"
-#include "Soccer.h"
+#include "SoccerTeam.h"
 
 using namespace std;
 using namespace sdds;
@@ -59,7 +59,7 @@ int main() {
 	printHeader("T2: Checking Constructors of Tournament");
 	for (int i = 0; i < 3; i++) {
 		cout << i + 1 << ". ";
-		t[i].display() <<endl;
+		t[i].display() << endl;
 	}
 	
 	SoccerTeam st2[] = {

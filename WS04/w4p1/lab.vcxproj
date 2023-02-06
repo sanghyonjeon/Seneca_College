@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{2a5224f7-073a-4cfa-b1bb-531590c58ba3}</ProjectGuid>
+    <ProjectGuid>{ead87995-77f9-4436-a038-8d7bb1a60e50}</ProjectGuid>
     <RootNamespace>lab</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -128,18 +128,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Soccer.cpp" />
+    <ClCompile Include="SoccerTeam.cpp" />
     <ClCompile Include="Tournament.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Soccer.h" />
+    <ClInclude Include="SoccerTeam.h" />
     <ClInclude Include="Tournament.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="correct_output.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\readme.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

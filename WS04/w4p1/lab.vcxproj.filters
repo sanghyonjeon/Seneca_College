@@ -18,7 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Soccer.cpp">
+    <ClCompile Include="SoccerTeam.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Tournament.cpp">
@@ -26,7 +26,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Soccer.h">
+    <ClInclude Include="SoccerTeam.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tournament.h">
@@ -37,10 +37,5 @@
     <Text Include="correct_output.txt">
       <Filter>Resource Files</Filter>
     </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\readme.md">
-      <Filter>Resource Files</Filter>
-    </None>
   </ItemGroup>
 </Project>
