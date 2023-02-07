@@ -23,9 +23,8 @@ namespace sdds {
         setEmpty();
     }
 
-    Tournament::Tournament(const char* tname, int noOfteam, const SoccerTeam* soccer)
-    {
-        setTournament(tname, noOfteam, soccer);
+    Tournament::Tournament(const char* name, int noOfteam, const SoccerTeam* soccer) {
+        setTournament(name, noOfteam, soccer);
     }
 
     void Tournament::setTournament(const char* name, int noOfteams, const SoccerTeam* soccer) {
@@ -58,17 +57,21 @@ namespace sdds {
             for (int j = i + 1; j < m_num; j++) {
                 int fouls1 = m_soccer[i].fouls();
                 int fouls2 = m_soccer[j].fouls();
+
+                if (m_soccer[i].m_goals < 0) {
+                    m_soccer[i].m_goals = 0;
+                }
                 if (fouls1 < fouls2) {
-                    m_soccer[j].m_noFouls = fouls2;
-                    m_soccer[j].setFine(m_soccer[j].fine() * 1.2, fouls2);
+                    m_soccer[j].m_noFouls = fouls2 * 2;
+                    m_soccer[j].setFine(m_soccer[j].fine() * 1.2, fouls2 * 2);
                     m_soccer[i].m_goals++;
                     if (m_soccer[j].fouls() > MAX_FOUL) {
                         m_soccer[j].m_noFouls = -1;
                     }
                 }
                 else {
-                    m_soccer[i].m_noFouls = fouls1;
-                    m_soccer[i].setFine(m_soccer[i].fine() * 1.2, fouls1);
+                    m_soccer[i].m_noFouls = fouls1 * 2;
+                    m_soccer[i].setFine(m_soccer[i].fine() * 1.2, fouls1 * 2);
                     m_soccer[j].m_goals++;
                     if (m_soccer[i].fouls() > MAX_FOUL) {
                         m_soccer[i].m_noFouls = -1;
@@ -81,23 +84,23 @@ namespace sdds {
 
     std::ostream& Tournament::display() const {
         if (isEmpty()) {
-            std::cout << "Invalid Tournament" << std::endl;
+            cout << "Invalid Tournament";
         }
         else {
-            std::cout << "Tournament name: " << m_name << std::endl;
-            std::cout << "list of the teams" << std::endl;
-            std::cout.width(45);
-            std::cout.fill(' ');
-            std::cout << "Fines";
-            std::cout.width(10);
-            std::cout << "Fouls";
-            std::cout.width(10);
-            std::cout << "Goals" << std::endl;
+            cout << "Tournament name: " << m_name << endl;
+            cout << "list of the teams" << endl;
+            cout.width(45);
+            cout.fill(' ');
+            cout << "Fines";
+            cout.width(10);
+            cout << "Fouls";
+            cout.width(10);
+            cout << "Goals" << endl;
             for (int i = 0; i < m_num; i++) {
                 m_soccer[i].display();
             }
         }
-        return std::cout;
+        return cout;
     }
 
     Tournament::~Tournament() {

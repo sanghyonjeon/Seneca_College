@@ -38,7 +38,7 @@ namespace sdds {
 
     void SoccerTeam::setName(const char* tname)
     {
-        if (tname != nullptr)
+        if (tname != nullptr && m_teamName[0] != '\0')
         {
             strncpy(m_teamName, tname, 41);
             m_teamName[40] = '\0';
@@ -91,27 +91,33 @@ namespace sdds {
     }
 
     std::ostream& SoccerTeam::display() const {
-        if (!isEmpty()) {
+        if (isEmpty()) {
             cout.width(30);
             cout.fill(' ');
-            cout << std::left << m_teamName;
-            cout.unsetf(std::ios::left);
-            cout.width(6);
+            cout.setf(ios::left);
+            cout<< m_teamName;
+            cout.unsetf(ios::left);
+            cout.width(15);
             cout.precision(2);
-            cout << std::fixed << m_fines;
+            cout.setf(ios::fixed);
+            cout << m_fines;
+            cout.unsetf(ios::fixed);
             cout.width(6);
             cout << m_noFouls;
-            cout.width(6);
-            cout << m_goals;
             cout.width(10);
+            cout << m_goals;
             if (m_goals > 0) {
                 cout << "w";
             }
             cout << endl;
         }
         else {
-            cout << "Invalid Team" << endl;
+            cout << "Invalid Team";
         }
         return cout;
+    }
+
+    SoccerTeam::~SoccerTeam() {
+
     }
 }

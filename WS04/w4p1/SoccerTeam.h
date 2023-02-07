@@ -22,6 +22,7 @@ namespace sdds {
     {
         SoccerTeam();
         SoccerTeam(const char* tname, double fines, int foul);
+        ~SoccerTeam();
 
         void setTeam(const SoccerTeam& team);
         void setName(const char* tname);

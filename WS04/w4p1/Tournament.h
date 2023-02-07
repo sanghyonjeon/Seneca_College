@@ -24,7 +24,8 @@ namespace sdds {
 
     public:
         Tournament();
-        Tournament(const char* tname, int noOfteam, const SoccerTeam* soccer);
+        Tournament(const char* name, int noOfteam, const SoccerTeam* soccer);
+        ~Tournament();
 
         void setTournament(const char* name, int noOfteam, const SoccerTeam* soccer);
         void setEmpty();
