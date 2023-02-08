@@ -20,7 +20,7 @@ namespace sdds {
     class Tournament {
         char* m_name;
         int m_num;
-        SoccerTeam* m_soccer;
+        SoccerTeam* m_soccer = nullptr;
 
     public:
         Tournament();
@@ -32,7 +32,7 @@ namespace sdds {
         bool isEmpty() const;
         Tournament& match(const SoccerTeam* ls);
 
-        std::ostream& display() const;
+        std::ostream & display() const;
     };
 }
 #endif // !SDDS_TOURNAMENT_H_

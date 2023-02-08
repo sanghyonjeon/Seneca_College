@@ -24,35 +24,45 @@ namespace sdds {
     }
 
     Tournament::Tournament(const char* name, int noOfteam, const SoccerTeam* soccer) {
-        setTournament(name, noOfteam, soccer);
+            setTournament(name, noOfteam, soccer);
+        
     }
 
     void Tournament::setTournament(const char* name, int noOfteams, const SoccerTeam* soccer) {
-        if (name == nullptr || name[0] == '\0' || noOfteams <= 0 || soccer == nullptr) {
-            setEmpty();
-        }
-        else {
+        bool valid = (name != nullptr && strlen(name) > 0 && noOfteams > 0 && soccer != nullptr);
+
+        if (valid) {
             m_num = noOfteams;
             m_name = new char[strlen(name) + 1];
             strcpy(m_name, name);
             m_soccer = new SoccerTeam[m_num];
             for (int i = 0; i < m_num; i++) {
-                m_soccer[i] = soccer[i];
+                m_soccer[i].m_fines = soccer[i].m_fines;
+                m_soccer[i].m_goals = soccer[i].m_goals;
+                m_soccer[i].m_noFouls = soccer[i].m_noFouls;
+                strcpy(m_soccer[i].m_teamName, soccer[i].m_teamName);
             }
+        }
+        else {
+            setEmpty();
         }
     }
 
     void Tournament::setEmpty() {
         m_name = nullptr;
-        m_num = 0;
         m_soccer = nullptr;
+        m_num = 0;
     }
 
     bool Tournament::isEmpty() const {
-        return m_name == nullptr || m_soccer == nullptr || m_num <= 0;
+        bool valid = (m_name != nullptr && m_soccer != nullptr && m_num >= 0);
+
+        return valid;
     }
 
     Tournament& Tournament::match(const SoccerTeam* ls) {
+        
+
         for (int i = 0; i < m_num; i++) {
             for (int j = i + 1; j < m_num; j++) {
                 int fouls1 = m_soccer[i].fouls();
@@ -84,9 +94,6 @@ namespace sdds {
 
     std::ostream& Tournament::display() const {
         if (isEmpty()) {
-            cout << "Invalid Tournament";
-        }
-        else {
             cout << "Tournament name: " << m_name << endl;
             cout << "list of the teams" << endl;
             cout.width(45);
@@ -99,6 +106,9 @@ namespace sdds {
             for (int i = 0; i < m_num; i++) {
                 m_soccer[i].display();
             }
+        }
+        else {
+            cout << "Invalid Tournament";
         }
         return cout;
     }

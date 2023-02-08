@@ -26,32 +26,45 @@ namespace sdds {
 
     SoccerTeam::SoccerTeam(const char* tname, double fines, int foul)
     {
-        setFine(fines, foul);
-        setName(tname);
-    }
+        bool valid = (&tname != nullptr && strlen(tname) > 0 && fines >= 0 && foul >= 0);
 
-    void SoccerTeam::setTeam(const SoccerTeam& team)
-    {
-        setFine(team.m_fines, team.m_noFouls);
-        setName(team.m_teamName);
-    }
-
-    void SoccerTeam::setName(const char* tname)
-    {
-        if (tname != nullptr && m_teamName[0] != '\0')
-        {
-            strncpy(m_teamName, tname, 41);
-            m_teamName[40] = '\0';
+        if (valid) {
+            setName(tname);
+            setFine(fines, foul);
+            m_goals = 0;
         }
-        else
-        {
+        else {
             setEmpty();
         }
     }
 
+    void SoccerTeam::setTeam(const SoccerTeam& team)
+    {
+        setName(team.m_teamName);
+        setFine(team.m_fines, team.m_noFouls);
+    }
+
+    void SoccerTeam::setName(const char* tname)
+    {
+        bool valid = (strlen(tname) > 0 && &tname != nullptr);
+
+        if (valid)
+        {
+            strcpy(m_teamName, tname);
+            //strncpy(m_teamName, tname, 41);
+            //m_teamName[40] = '\0';
+        }
+        //else
+        //{
+        //    setEmpty();
+        //}
+    }
+
     void SoccerTeam::setFine(double fines, int foul)
     {
-        if (fines >= 0 && foul >= 0)
+        bool valid = (fines >= 0 && foul >= 0);
+
+        if (valid)
         {
             m_fines = fines;
             m_noFouls = foul;
@@ -72,7 +85,9 @@ namespace sdds {
 
     bool SoccerTeam::isEmpty() const
     {
-        return (m_teamName[0] != '\0' && m_fines >= 0 && m_noFouls >= 0);
+        bool valid = (m_teamName[0] != '\0' && m_fines >= 0 && m_noFouls >= 0);
+
+        return (valid);
     }
 
     void SoccerTeam::calFines()

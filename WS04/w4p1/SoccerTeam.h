@@ -20,6 +20,11 @@ namespace sdds {
 
     struct SoccerTeam
     {
+        char m_teamName[41]; //a statically allocated Cstring with size 41
+        int m_noFouls; //number of fouls
+        double m_fines; //fines amount
+        int m_goals; //number of goals
+
         SoccerTeam();
         SoccerTeam(const char* tname, double fines, int foul);
         ~SoccerTeam();
@@ -34,11 +39,6 @@ namespace sdds {
         double fine() const;
 
         std::ostream& display()const;
-
-        char m_teamName[41]; //a statically allocated Cstring with size 41
-        int m_noFouls; //number of fouls
-        double m_fines; //fines amount
-        int m_goals; //number of goals
     };
 }
 #endif // !SDDS_SOCCERTEAM_H_
