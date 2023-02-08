@@ -15,7 +15,7 @@
 ***********************************************************************/
 #include<iostream>
 #include"Tournament.h"
-#include "SoccerTeam.h"
+#include "Soccer.h"
 
 using namespace std;
 using namespace sdds;

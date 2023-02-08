@@ -15,19 +15,23 @@ professor provided to complete my workshops and assignments.
 #include <iostream>
 #include <cstring>
 #include "Tournament.h"
+#include "Soccer.h"
 
 using namespace std;
 
 namespace sdds {
+    // Default constructor
     Tournament::Tournament() {
         setEmpty();
     }
 
+    // Three argument constructor
     Tournament::Tournament(const char* name, int noOfteam, const SoccerTeam* soccer) {
             setTournament(name, noOfteam, soccer);
-        
     }
 
+    // If all the received arguments are valid, this function will set the values to the
+    // appropriate data members. Otherwise, it will set the Tournament to an empty state
     void Tournament::setTournament(const char* name, int noOfteams, const SoccerTeam* soccer) {
         bool valid = (name != nullptr && strlen(name) > 0 && noOfteams > 0 && soccer != nullptr);
 
@@ -48,50 +52,36 @@ namespace sdds {
         }
     }
 
+    // Sets the Tournamnet object to an Empty State
     void Tournament::setEmpty() {
         m_name = nullptr;
         m_soccer = nullptr;
         m_num = 0;
     }
 
+    // Returns true if m_name and m_soccer is not null and m_num is greater than or equal to 0
     bool Tournament::isEmpty() const {
         bool valid = (m_name != nullptr && m_soccer != nullptr && m_num >= 0);
 
         return valid;
     }
 
+    // This function will find out the winner between 2 soccer teams by having matches.
     Tournament& Tournament::match(const SoccerTeam* ls) {
-        
-
-        for (int i = 0; i < m_num; i++) {
-            for (int j = i + 1; j < m_num; j++) {
-                int fouls1 = m_soccer[i].fouls();
-                int fouls2 = m_soccer[j].fouls();
-
-                if (m_soccer[i].m_goals < 0) {
-                    m_soccer[i].m_goals = 0;
-                }
-                if (fouls1 < fouls2) {
-                    m_soccer[j].m_noFouls = fouls2 * 2;
-                    m_soccer[j].setFine(m_soccer[j].fine() * 1.2, fouls2 * 2);
-                    m_soccer[i].m_goals++;
-                    if (m_soccer[j].fouls() > MAX_FOUL) {
-                        m_soccer[j].m_noFouls = -1;
-                    }
-                }
-                else {
-                    m_soccer[i].m_noFouls = fouls1 * 2;
-                    m_soccer[i].setFine(m_soccer[i].fine() * 1.2, fouls1 * 2);
-                    m_soccer[j].m_goals++;
-                    if (m_soccer[i].fouls() > MAX_FOUL) {
-                        m_soccer[i].m_noFouls = -1;
-                    }
+        for (int i = 0; i < 1; i++) {
+            if (m_soccer[i].fouls() < m_soccer[i + 1].fouls()) {
+                m_soccer[i + 1].m_noFouls *= 2;
+                m_soccer[i + 1].calFines();
+                m_soccer[i].m_goals++;
+                if (m_soccer[i + 1].m_noFouls > MAX_FOUL) {
+                    m_soccer[i + 1].m_noFouls = -1;
                 }
             }
         }
         return *this;
     }
 
+    // Displays information about the tournament outcome
     std::ostream& Tournament::display() const {
         if (isEmpty()) {
             cout << "Tournament name: " << m_name << endl;
@@ -103,7 +93,8 @@ namespace sdds {
             cout << "Fouls";
             cout.width(10);
             cout << "Goals" << endl;
-            for (int i = 0; i < m_num; i++) {
+            for (int i = 0; i < m_num; i++) {\
+                cout << "Team[" << i + 1 << "] :";
                 m_soccer[i].display();
             }
         }
@@ -113,6 +104,7 @@ namespace sdds {
         return cout;
     }
 
+    // Destructor to deallocate the memory allocated by m_name and m_soccer.
     Tournament::~Tournament() {
         delete[] m_name;
         delete[] m_soccer;
