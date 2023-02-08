@@ -15,7 +15,6 @@ professor provided to complete my workshops and assignments.
 #include <iostream>
 #include <cstring>
 #include "Tournament.h"
-#include "Soccer.h"
 
 using namespace std;
 
@@ -41,10 +40,8 @@ namespace sdds {
             strcpy(m_name, name);
             m_soccer = new SoccerTeam[m_num];
             for (int i = 0; i < m_num; i++) {
-                m_soccer[i].m_fines = soccer[i].m_fines;
+                m_soccer[i].setTeam(soccer[i]);
                 m_soccer[i].m_goals = soccer[i].m_goals;
-                m_soccer[i].m_noFouls = soccer[i].m_noFouls;
-                strcpy(m_soccer[i].m_teamName, soccer[i].m_teamName);
             }
         }
         else {
