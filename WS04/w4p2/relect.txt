@@ -12,25 +12,24 @@
 ***********************************************************************/
 In this workshop, I learned about the basics of class constructors,
 destructors, and references in C++. A constructor is a special member
-function of a class that is automatically called when an object of that
-class is created. It is used to initialize the objects of that class. A
-default constructor is a constructor that takes no parameters and is
-automatically called if no other constructor is specified. Custom
-constructors can be created with different numbers of arguments to
-initialize the object in a specific way.
+function of a class. A constructor is automatically called when an object
+of that class is created. It is used to initialize the objects of that
+class. A default constructor takes no parameters and is automatically
+called if no other constructor is specified. Custom constructors can be
+created with different numbers of arguments to initialize the object in
+a specific way.
 
-A destructor is a special member function that is automatically called
-when an object of a class goes out of scope. It is used to free up any
-memory that was dynamically allocated within the class. The destructor
-is the counterpart of the constructor and is used to prevent memory
-leaks in C++ programs.
+When an object of a class goes out of scope, a destructor is
+automatically called to free up any memory that was dynamically
+allocated within the class. The destructor is the counterpart of the
+constructor and is used to prevent memory leaks in C++ programs.
 
-I also learned about references in C++. A reference is an alias for a
-variable and can be used to manipulate the original variable. A
-reference in C++ is declared using the & operator and is initialized
-with the address of an existing variable. The reference must be
-initialized when it is declared and cannot be changed to refer to a
-different variable after that.
+I also learned about references in C++. A reference is the alias for a
+variable and can be used to manipulate the original variable. The &
+operator is used to declare a reference, and it is initialized with the
+address of an existing variable. The reference must be initialized when
+it is declared and cannot be changed to refer to a different variable
+after that.
 
 One of the difficulties I faced during this workshop was understanding
 the use of references in the read() function. I struggled with the
