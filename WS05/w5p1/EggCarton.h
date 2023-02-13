@@ -16,45 +16,48 @@ professor provided to complete my workshops and assignments.
 #include <iostream>
 
 namespace sdds {
+    // Constant Values (Weights are in Grams)
     const int RegularEggWeight = 50;
     const int JumboEggWeight = 75;
     const double GramsToKilos = 0.001;
 
     class EggCarton {
+        // Member variables
         int m_size;
         int m_noOfEggs;
         bool m_jumbo;
 
     public:
+        // Constructor
         EggCarton(int size = 6, int noOfEggs = 0, bool jumbo = false);
-        void setBroken();
-        bool isBroken(int m_size, int m_noOfEggs) const;
 
+        // Member Functions
+        bool isBroken(int m_size, int m_noOfEggs) const;
+        int getNoOfEggs() const;
+        void setBroken();
         std::ostream& display(std::ostream& ostr = std::cout) const;
         std::ostream& displayCarton(int size, int noOfEggs, bool jumbo, std::ostream & ostr)const;
-
         std::istream& read(std::istream& istr = std::cin);
 
+        // Type Conversion Operator Overloads
         operator bool() const;
         operator int() const;
         operator double() const;
 
+        // Unary Operator Overloads
         EggCarton& operator--();
         EggCarton& operator++();
-
         EggCarton operator--(int);
         EggCarton operator++(int);
 
+        // Binary Member Operators
         EggCarton& operator=(int value);
         EggCarton& operator+=(int value);
         EggCarton& operator+=(EggCarton& right);
         bool operator==(const EggCarton& right) const;
-
-        int getNoOfEggs() const;
     };
-
+    // Helper Binary Operator Overload
     int operator+(int left, const EggCarton& right);
-
     std::ostream& operator<<(std::ostream& ostr, const EggCarton& right);
     std::istream& operator>>(std::istream& istr, EggCarton& right);
 }

@@ -13,11 +13,13 @@ professor provided to complete my workshops and assignments.
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
+#include <cmath>
 #include "EggCarton.h"
 
 using namespace std;
 
 namespace sdds {
+    // Constructor
     EggCarton::EggCarton(int size, int noOfEggs, bool jumbo) {
         bool validSize = (size % 6 == 0 && size >= 6 && size <= 36);
         bool validNoOfEggs = (noOfEggs <= size && noOfEggs >= 0);
@@ -32,15 +34,20 @@ namespace sdds {
         }
     }
 
-    void EggCarton::setBroken() {
-        m_size = -1;
-        m_noOfEggs = -1;
-    }
-
+    // Member Functions
     bool EggCarton::isBroken(int m_size, int m_noOfEggs) const {
         bool broken = (m_size == -1 && m_noOfEggs == -1);
 
         return broken;
+    }
+
+    int EggCarton::getNoOfEggs() const {
+        return m_noOfEggs;
+    }
+
+    void EggCarton::setBroken() {
+        m_size = -1;
+        m_noOfEggs = -1;
     }
     
     std::ostream& EggCarton::display(std::ostream& ostr) const {
@@ -99,6 +106,7 @@ namespace sdds {
         return istr;
     }
 
+    // Type Conversion Operator Overloads
     EggCarton::operator bool() const {
         return !isBroken(m_size, m_noOfEggs);
     }
@@ -111,6 +119,7 @@ namespace sdds {
         return (bool(*this)) ? (m_noOfEggs * ((m_jumbo) ? JumboEggWeight : RegularEggWeight) * GramsToKilos) : -1.0;
     }
 
+    // Unary Operator Overloads
     EggCarton& EggCarton::operator--() {
         if (bool(*this)) {
             m_noOfEggs--;
@@ -132,7 +141,7 @@ namespace sdds {
 
     EggCarton EggCarton::operator--(int) {
         EggCarton copy = *this;
-        --copy;
+        --(*this);
 
         return copy;
     }
@@ -144,6 +153,7 @@ namespace sdds {
         return copy;
     }
 
+    // Binary Member Operators
     EggCarton& EggCarton::operator=(int value) {
         m_noOfEggs = value;
         if (m_noOfEggs > m_size) {
@@ -180,13 +190,10 @@ namespace sdds {
     }
 
     bool EggCarton::operator==(const EggCarton& right) const {
-        return abs(double(*this) - double(right)) <= 0.001;
+        return (std::abs(double(*this) - double(right)) <= 0.001);
     }
 
-    int EggCarton::getNoOfEggs() const {
-        return m_noOfEggs;
-    }
-
+    // Helper Binary Operator Overload
     int operator+(int left, const EggCarton& right) {
         return (bool(right)) ? (left + right.getNoOfEggs()) : left;
     }
