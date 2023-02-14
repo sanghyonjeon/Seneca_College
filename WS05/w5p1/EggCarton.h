@@ -22,7 +22,7 @@ namespace sdds {
     const double GramsToKilos = 0.001;
 
     class EggCarton {
-        // Member variables
+        // Member Variables
         int m_size;
         int m_noOfEggs;
         bool m_jumbo;
