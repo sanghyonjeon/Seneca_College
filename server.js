@@ -7,33 +7,35 @@ Section    : NGG
 Date       : February 17, 2023
 
 Authenticity Declaration:
-I have done all the coding by myself and only copied the code that my
-professor provided to complete my workshops and assignments.
+I declare that this assignment is my own work in accordance with Seneca
+Academic Policy. I have done all the coding by myself and only copied the code
+that my professor provided to complete this assignment.
 
 Online (Cyclic) Link: 
 ******************************************************************************/
-var blogService = require("./blog-service.js");
-var path = require("path");
+const express = require("express");
+const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+const streamifier = require("streamifier");
+const path = require("path");
+const blogService = require("./blog-service.js");
 
 // The server must make use of the "express" module
-var express = require("express");
-var app = express();
+const app = express();
 
-const multer = require("multer");
-const upload = multer(); // no { storage: storage } since we are not using disk storage
+// The server must listen on process.env.PORT || 8080
+const HTTP_PORT = process.env.PORT || 8080;
 
-const cloudinary = require("cloudinary").v2;
+// no { storage: storage } since we are not using disk storage
+const upload = multer();
+
+// Set the Cloudinary config to use your "Cloud Name", "API Key" and "API Secret" values
 cloudinary.config({
   cloud_name: "dpju16bxg",
   api_key: "528451683481667",
   api_secret: "gU9teO1Y7g3BGj-yisQdph-xEag",
   secure: true,
 });
-
-const streamifier = require("streamifier");
-
-// The server must listen on process.env.PORT || 8080
-var HTTP_PORT = process.env.PORT || 8080;
 
 // For your server to correctly return the "/css/main.css" file, the "static"
 // middleware must be used
@@ -65,40 +67,29 @@ app.get("/blog", (req, res) => {
 app.get("/posts", (req, res) => {
   let category = req.query.category;
   let minDate = req.query.minDate;
+  let returnedPromise = null;
 
   if (category) {
-    blogService
-      .getPostsByCategory(category)
-      .then((data) => {
-        res.json(data);
-      })
-      .catch((err) => {
-        res.json({ message: err });
-      });
+    returnedPromise = blogService.getPostsByCategory(category);
   } else if (minDate) {
-    blogService
-      .getPostsByMinDate(minDate)
-      .then((data) => {
-        res.json(data);
-      })
-      .catch((err) => {
-        res.json({ message: err });
-      });
+    returnedPromise = blogService.getPostsByMinDate(minDate);
   } else {
-    blogService
-      .getAllPosts()
-      .then((data) => {
-        res.json(data);
-      })
-      .catch((err) => {
-        res.json({ message: err });
-      });
+    returnedPromise = blogService.getAllPosts();
   }
+
+  returnedPromise
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.json({ message: err });
+    });
 });
 
 // This route will return a JSON formatted string containing a single post whose id matches the value
 app.get("/post/:id", (req, res) => {
-  const postId = req.params.id;
+  let postId = req.params.id;
+
   blogService
     .getPostById(postId)
     .then((data) => {
@@ -124,11 +115,6 @@ app.get("/categories", (req, res) => {
 // This route simply sends the file "/views/addPost.html"
 app.get("/posts/add", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "addPost.html"));
-});
-
-// Any other routes will return a custom message with an HTTP status code
-app.use((req, res) => {
-  res.status(404).send("Page Not Found");
 });
 
 app.post("/posts/add", upload.single("featureImage"), (req, res) => {
@@ -160,6 +146,11 @@ app.post("/posts/add", upload.single("featureImage"), (req, res) => {
       res.redirect("/posts");
     });
   });
+});
+
+// Any other routes will return a custom message with an HTTP status code
+app.use((req, res) => {
+  res.status(404).send("Page Not Found");
 });
 
 blogService
