@@ -1,25 +1,41 @@
 /******************************************************************************
-                             WEB322 – Assignment 2
+                             WEB322 – Assignment 3
 Full Name  : Sang Hyon Jeon
 Student ID#: 1123552194
 Email      : shjeon5@myseneca.ca
-Section    : NBB
-Date       : February 3, 2023
+Section    : NGG
+Date       : February 17, 2023
 
 Authenticity Declaration:
-I have done all the coding by myself and only copied the code that my
-professor provided to complete my workshops and assignments.
+I declare that this assignment is my own work in accordance with Seneca
+Academic Policy. I have done all the coding by myself and only copied the code
+that my professor provided to complete this assignment.
 
-Online (Cyclic) Link: https://dull-gray-chipmunk.cyclic.app
+Online (Cyclic) Link: 
 ******************************************************************************/
-var blogService = require("./blog-service.js");
-var path = require("path");
+const express = require("express");
+const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+const streamifier = require("streamifier");
+const path = require("path");
+const blogService = require("./blog-service.js");
+
 // The server must make use of the "express" module
-var express = require("express");
-var app = express();
+const app = express();
 
 // The server must listen on process.env.PORT || 8080
-var HTTP_PORT = process.env.PORT || 8080;
+const HTTP_PORT = process.env.PORT || 8080;
+
+// no { storage: storage } since we are not using disk storage
+const upload = multer();
+
+// Set the Cloudinary config to use your "Cloud Name", "API Key" and "API Secret" values
+cloudinary.config({
+  cloud_name: "dpju16bxg",
+  api_key: "528451683481667",
+  api_secret: "gU9teO1Y7g3BGj-yisQdph-xEag",
+  secure: true,
+});
 
 // For your server to correctly return the "/css/main.css" file, the "static"
 // middleware must be used
@@ -47,10 +63,35 @@ app.get("/blog", (req, res) => {
     });
 });
 
-// This route "/posts" gets all posts within posts.json
+// This route "/posts" gets posts within posts.json by category, minDate, or just all the posts
 app.get("/posts", (req, res) => {
+  let category = req.query.category;
+  let minDate = req.query.minDate;
+  let returnedPromise = null;
+
+  if (category) {
+    returnedPromise = blogService.getPostsByCategory(category);
+  } else if (minDate) {
+    returnedPromise = blogService.getPostsByMinDate(minDate);
+  } else {
+    returnedPromise = blogService.getAllPosts();
+  }
+
+  returnedPromise
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.json({ message: err });
+    });
+});
+
+// This route will return a JSON formatted string containing a single post whose id matches the value
+app.get("/post/:id", (req, res) => {
+  let postId = req.params.id;
+
   blogService
-    .getAllPosts()
+    .getPostById(postId)
     .then((data) => {
       res.json(data);
     })
@@ -69,6 +110,42 @@ app.get("/categories", (req, res) => {
     .catch((err) => {
       res.json({ message: err });
     });
+});
+
+// This route simply sends the file "/views/addPost.html"
+app.get("/posts/add", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "addPost.html"));
+});
+
+app.post("/posts/add", upload.single("featureImage"), (req, res) => {
+  let streamUpload = (req) => {
+    return new Promise((resolve, reject) => {
+      let stream = cloudinary.uploader.upload_stream((error, result) => {
+        if (result) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      });
+
+      streamifier.createReadStream(req.file.buffer).pipe(stream);
+    });
+  };
+
+  async function upload(req) {
+    let result = await streamUpload(req);
+    console.log(result);
+    return result;
+  }
+
+  upload(req).then((uploaded) => {
+    req.body.featureImage = uploaded.url;
+
+    // Process the req.body and add it as a new Blog Post before redirecting to /posts
+    blogService.addPost(req.body).then((postData) => {
+      res.redirect("/posts");
+    });
+  });
 });
 
 // Any other routes will return a custom message with an HTTP status code
