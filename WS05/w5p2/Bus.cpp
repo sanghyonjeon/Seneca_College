@@ -58,6 +58,10 @@ namespace sdds {
         }
         else {
             voiddrawBus(m_seats, m_passengers, ostr);
+            ostr << "Total Fare Price: ";
+            ostr.setf(ios::fixed);
+            ostr.precision(2);
+            ostr << double(*this) << endl;
         }
         return ostr;
     }
@@ -127,8 +131,8 @@ namespace sdds {
     // Unary Operator Overloads
     bool Bus::operator--() {
         bool flag = false;
-        
-        if (bool(*this)) {
+
+        if (bool(*this) && m_passengers) {
             m_passengers--;
             flag = true;
         }
@@ -150,7 +154,7 @@ namespace sdds {
     bool Bus::operator--(int) {
         bool flag = false;
 
-        if (bool(*this)) {
+        if (bool(*this) && m_passengers) {
             m_passengers--;
             flag = true;
         }
@@ -211,7 +215,7 @@ namespace sdds {
 
     bool Bus::operator==(const Bus& right) const {
         bool flag = false;
-        
+
         if (bool(*this) && bool(right) && m_passengers == right.m_passengers) {
             flag = true;
         }
