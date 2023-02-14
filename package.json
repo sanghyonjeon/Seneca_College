@@ -1,6 +1,6 @@
 {
   "name": "web322-app",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "WEB322 Assignment 2",
   "main": "server.js",
   "scripts": {
