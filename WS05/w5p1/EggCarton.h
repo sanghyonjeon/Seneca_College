@@ -27,6 +27,7 @@ namespace sdds {
         int m_noOfEggs;
         bool m_jumbo;
 
+        // Public Member Functions
     public:
         // Constructor
         EggCarton(int size = 6, int noOfEggs = 0, bool jumbo = false);
@@ -34,9 +35,7 @@ namespace sdds {
         // Member Functions
         bool isBroken(int m_size, int m_noOfEggs) const;
         int getNoOfEggs() const;
-        void setBroken();
         std::ostream& display(std::ostream& ostr = std::cout) const;
-        std::ostream& displayCarton(int size, int noOfEggs, bool jumbo, std::ostream & ostr)const;
         std::istream& read(std::istream& istr = std::cin);
 
         // Type Conversion Operator Overloads
@@ -55,6 +54,11 @@ namespace sdds {
         EggCarton& operator+=(int value);
         EggCarton& operator+=(EggCarton& right);
         bool operator==(const EggCarton& right) const;
+
+        // Private Member Functions
+    private:
+        void setBroken();
+        std::ostream& displayCarton(int size, int noOfEggs, bool jumbo, std::ostream& ostr)const;
     };
     // Helper Binary Operator Overload
     int operator+(int left, const EggCarton& right);
