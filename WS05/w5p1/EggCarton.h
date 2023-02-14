@@ -27,6 +27,10 @@ namespace sdds {
         int m_noOfEggs;
         bool m_jumbo;
 
+        // Private Member Functions
+        void setBroken();
+        std::ostream& displayCarton(int size, int noOfEggs, bool jumbo, std::ostream& ostr)const;
+
         // Public Member Functions
     public:
         // Constructor
@@ -54,11 +58,6 @@ namespace sdds {
         EggCarton& operator+=(int value);
         EggCarton& operator+=(EggCarton& right);
         bool operator==(const EggCarton& right) const;
-
-        // Private Member Functions
-    private:
-        void setBroken();
-        std::ostream& displayCarton(int size, int noOfEggs, bool jumbo, std::ostream& ostr)const;
     };
     // Helper Binary Operator Overload
     int operator+(int left, const EggCarton& right);
