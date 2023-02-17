@@ -64,6 +64,13 @@ function addPost(postData) {
       postData.published = true;
     }
 
+    // Add the property "postDate" to the postData object
+    let currentDate = new Date();
+    let formattedDate = `${currentDate.getFullYear()}-${
+      currentDate.getMonth() + 1
+    }-${currentDate.getDate()}`;
+    postData.postDate = formattedDate;
+
     postData.id = posts.length + 1;
     posts.push(postData);
     resolve(postData);
@@ -108,6 +115,20 @@ function getPostById(id) {
   });
 }
 
+function getPublishedPostsByCategory(category) {
+  return new Promise((resolve, reject) => {
+    let publishedPosts = posts.filter(
+      (post) => post.published && post.category == category
+    );
+
+    if (publishedPosts.length == 0) {
+      reject("no results returned");
+    } else {
+      resolve(publishedPosts);
+    }
+  });
+}
+
 module.exports = {
   initialize,
   getAllPosts,
@@ -117,4 +138,5 @@ module.exports = {
   getPostsByCategory,
   getPostsByMinDate,
   getPostById,
+  getPublishedPostsByCategory,
 };

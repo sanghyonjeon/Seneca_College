@@ -17,8 +17,10 @@ const express = require("express");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const streamifier = require("streamifier");
+const exphbs = require("express-handlebars");
+const stripJs = require("strip-js");
 const path = require("path");
-const blogService = require("./blog-service.js");
+const blogData = require("./blog-service.js");
 
 // The server must make use of the "express" module
 const app = express();
@@ -37,30 +39,167 @@ cloudinary.config({
   secure: true,
 });
 
+// Register handlebars as the rendering engine for views
+app.engine(
+  ".hbs",
+  exphbs.engine({
+    extname: ".hbs",
+    helpers: {
+      // If app.locals.activeRoute matches the provided url, render the correct <li> element
+      // and add the class "active"
+      navLink: function (url, options) {
+        return (
+          "<li" +
+          (url == app.locals.activeRoute ? ' class="active" ' : "") +
+          '><a href="' +
+          url +
+          '">' +
+          options.fn(this) +
+          "</a></li>"
+        );
+      },
+
+      // Exactly like the "if" helper, but with the added benefit of
+      // evaluating a simple expression for equality
+      equal: function (lvalue, rvalue, options) {
+        if (arguments.length < 3)
+          throw new Error("Handlebars Helper equal needs 2 parameters");
+        if (lvalue != rvalue) {
+          return options.inverse(this);
+        } else {
+          return options.fn(this);
+        }
+      },
+
+      // Removes unwanted JavaScript code from our post body string
+      safeHTML: function (context) {
+        return stripJs(context);
+      },
+    },
+  })
+);
+app.set("view engine", ".hbs");
+
 // For your server to correctly return the "/css/main.css" file, the "static"
 // middleware must be used
 app.use(express.static("public"));
 
-// The route "/" must redirect the user to the "/about" route
+// Add the property "activeRoute" to "app.locals" whenever the route changes
+// If the blog is currently viewing a category, that category will be set in "app.locals"
+app.use(function (req, res, next) {
+  let route = req.path.substring(1);
+  app.locals.activeRoute =
+    "/" +
+    (isNaN(route.split("/")[1])
+      ? route.replace(/\/(?!.*)/, "")
+      : route.replace(/\/(.*)/, ""));
+  app.locals.viewingCategory = req.query.category;
+  next();
+});
+
+// The default route "/" must redirect the user to the "/blog" route
 app.get("/", (req, res) => {
-  res.redirect("/about");
+  res.redirect("/blog");
 });
 
 // The route "/about" must return the about.html file from the views folder
 app.get("/about", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "about.html"));
+  res.render("about");
 });
 
-// The route "/blog" gets all posts who have published property set to true within posts.json
-app.get("/blog", (req, res) => {
-  blogService
-    .getPublishedPosts()
-    .then((data) => {
-      res.json(data);
-    })
-    .catch((err) => {
-      res.json({ message: err });
-    });
+// Provided
+app.get("/blog", async (req, res) => {
+  // Declare an object to store properties for the view
+  let viewData = {};
+
+  try {
+    // declare empty array to hold "post" objects
+    let posts = [];
+
+    // if there's a "category" query, filter the returned posts by category
+    if (req.query.category) {
+      // Obtain the published "posts" by category
+      posts = await blogData.getPublishedPostsByCategory(req.query.category);
+    } else {
+      // Obtain the published "posts"
+      posts = await blogData.getPublishedPosts();
+    }
+
+    // sort the published posts by postDate
+    posts.sort((a, b) => new Date(b.postDate) - new Date(a.postDate));
+
+    // get the latest post from the front of the list (element 0)
+    let post = posts[0];
+
+    // store the "posts" and "post" data in the viewData object (to be passed to the view)
+    viewData.posts = posts;
+    viewData.post = post;
+  } catch (err) {
+    viewData.message = "no results";
+  }
+
+  try {
+    // Obtain the full list of "categories"
+    let categories = await blogData.getCategories();
+
+    // store the "categories" data in the viewData object (to be passed to the view)
+    viewData.categories = categories;
+  } catch (err) {
+    viewData.categoriesMessage = "no results";
+  }
+
+  // render the "blog" view with all of the data (viewData)
+  res.render("blog", { data: viewData });
+});
+
+// Nearly identical to the app.get('/blog')… route
+// However, instead of using the most recent blog post, it uses the blog post with
+// the id obtained from the route parameter
+app.get("/blog/:id", async (req, res) => {
+  // Declare an object to store properties for the view
+  let viewData = {};
+
+  try {
+    // declare empty array to hold "post" objects
+    let posts = [];
+
+    // if there's a "category" query, filter the returned posts by category
+    if (req.query.category) {
+      // Obtain the published "posts" by category
+      posts = await blogData.getPublishedPostsByCategory(req.query.category);
+    } else {
+      // Obtain the published "posts"
+      posts = await blogData.getPublishedPosts();
+    }
+
+    // sort the published posts by postDate
+    posts.sort((a, b) => new Date(b.postDate) - new Date(a.postDate));
+
+    // store the "posts" and "post" data in the viewData object (to be passed to the view)
+    viewData.posts = posts;
+  } catch (err) {
+    viewData.message = "no results";
+  }
+
+  try {
+    // Obtain the post by "id"
+    viewData.post = await blogData.getPostById(req.params.id);
+  } catch (err) {
+    viewData.message = "no results";
+  }
+
+  try {
+    // Obtain the full list of "categories"
+    let categories = await blogData.getCategories();
+
+    // store the "categories" data in the viewData object (to be passed to the view)
+    viewData.categories = categories;
+  } catch (err) {
+    viewData.categoriesMessage = "no results";
+  }
+
+  // render the "blog" view with all of the data (viewData)
+  res.render("blog", { data: viewData });
 });
 
 // This route "/posts" gets posts within posts.json by category, minDate, or just all the posts
@@ -70,19 +209,19 @@ app.get("/posts", (req, res) => {
   let returnedPromise = null;
 
   if (category) {
-    returnedPromise = blogService.getPostsByCategory(category);
+    returnedPromise = blogData.getPostsByCategory(category);
   } else if (minDate) {
-    returnedPromise = blogService.getPostsByMinDate(minDate);
+    returnedPromise = blogData.getPostsByMinDate(minDate);
   } else {
-    returnedPromise = blogService.getAllPosts();
+    returnedPromise = blogData.getAllPosts();
   }
 
   returnedPromise
     .then((data) => {
-      res.json(data);
+      res.render("posts", { posts: data });
     })
     .catch((err) => {
-      res.json({ message: err });
+      res.render("posts", { message: "no results" });
     });
 });
 
@@ -90,33 +229,34 @@ app.get("/posts", (req, res) => {
 app.get("/post/:id", (req, res) => {
   let postId = req.params.id;
 
-  blogService
+  blogData
     .getPostById(postId)
     .then((data) => {
-      res.json(data);
+      res.render("posts", { posts: data });
     })
     .catch((err) => {
-      res.json({ message: err });
+      res.render("posts", { message: "no results" });
     });
 });
 
 // This route "/categories" gets all categories within the categories.json
 app.get("/categories", (req, res) => {
-  blogService
+  blogData
     .getCategories()
     .then((data) => {
-      res.json(data);
+      res.render("categories", { categories: data });
     })
     .catch((err) => {
-      res.json({ message: err });
+      res.render("categories", { message: "no results" });
     });
 });
 
 // This route simply sends the file "/views/addPost.html"
 app.get("/posts/add", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "addPost.html"));
+  res.render("addPost");
 });
 
+// Most of this function was provided
 app.post("/posts/add", upload.single("featureImage"), (req, res) => {
   let streamUpload = (req) => {
     return new Promise((resolve, reject) => {
@@ -142,18 +282,18 @@ app.post("/posts/add", upload.single("featureImage"), (req, res) => {
     req.body.featureImage = uploaded.url;
 
     // Process the req.body and add it as a new Blog Post before redirecting to /posts
-    blogService.addPost(req.body).then((postData) => {
+    blogData.addPost(req.body).then((postData) => {
       res.redirect("/posts");
     });
   });
 });
 
 // Any other routes will return a custom message with an HTTP status code
-app.use((req, res) => {
-  res.status(404).send("Page Not Found");
+app.use(function (req, res, next) {
+  res.status(404).render("404");
 });
 
-blogService
+blogData
   .initialize()
   .then(() => {
     // The server must output: "Express http server listening on port" to the
