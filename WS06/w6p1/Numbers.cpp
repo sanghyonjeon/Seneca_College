@@ -47,12 +47,13 @@ namespace sdds {
     }
 
     std::istream& operator>>(std::istream& istr, Numbers& nums) {
-        double value;
-
-        while (istr >> value) {
+        double value = 0;
+        istr >> value;
+        istr.ignore(1000, '\n');
+        if (istr)
+        {
             nums += value;
         }
-
         return istr;
     }
 
@@ -68,7 +69,7 @@ namespace sdds {
         int numLines = countLines(filename);
         int i = 0;
 
-        if (m_collection) {
+        if (m_collection != nullptr) {
             delete[] m_collection;
             m_collection = nullptr;
         }
@@ -77,7 +78,7 @@ namespace sdds {
             m_collection = new double[numLines];
             std::ifstream file(filename);
 
-            while (file >> m_collection[i] && i < numLines) {
+            while (i < numLines && file >> m_collection[i]) {
                 i++;
             }
 
@@ -168,7 +169,7 @@ namespace sdds {
             ostr << fixed;
 
             if (!m_original) {
-                ostr << "Copy Of ";
+                ostr << "Copy of ";
             }
 
             ostr << m_filename << endl;
@@ -203,8 +204,9 @@ namespace sdds {
         if (this != &src) {
             save();
 
-            if (m_collection) {
+            if (m_collection != nullptr) {
                 delete[] m_collection;
+                m_collection = nullptr;
             }
 
             setEmpty();

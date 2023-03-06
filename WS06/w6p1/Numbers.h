@@ -26,11 +26,11 @@ namespace sdds {
     std::istream& operator>>(std::istream& istr, sdds::Numbers& nums);
 
     class Numbers {
-        double* m_collection;
-        char m_filename[MAX_FILENAME_LENGTH + 1];
-        unsigned int m_colSize;
-        bool m_original;
-        bool m_added;
+        double* m_collection = nullptr;
+        char m_filename[MAX_FILENAME_LENGTH + 1] = { '\0' };
+        unsigned int m_colSize = 0;
+        bool m_original = false;
+        bool m_added = false;
       
         void setEmpty();
         bool load(const char* filename);
