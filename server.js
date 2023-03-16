@@ -1,17 +1,17 @@
 /******************************************************************************
-                             WEB322 – Assignment 4
+                             WEB322 – Assignment 5
 Full Name  : Sang Hyon Jeon
-Student ID#: 1123552194
+Student ID#: 113552194
 Email      : shjeon5@myseneca.ca
 Section    : NGG
-Date       : March 10, 2023
+Date       : March 24, 2023
 
 Authenticity Declaration:
 I declare that this assignment is my own work in accordance with Seneca
 Academic Policy. I have done all the coding by myself and only copied the code
 that my professor provided to complete this assignment.
 
-Online (Cyclic) Link: https://yellow-donkey-slip.cyclic.app
+Online (Cyclic) Link: 
 ******************************************************************************/
 const express = require("express");
 const multer = require("multer");
@@ -75,6 +75,14 @@ app.engine(
       safeHTML: function (context) {
         return stripJs(context);
       },
+
+      // Helps keep our date formatting consistent in the views
+      formatDate: function (dateObj) {
+        let year = dateObj.getFullYear();
+        let month = (dateObj.getMonth() + 1).toString();
+        let day = dateObj.getDate().toString();
+        return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+      },
     },
   })
 );
@@ -83,6 +91,10 @@ app.set("view engine", ".hbs");
 // For your server to correctly return the "/css/main.css" file, the "static"
 // middleware must be used
 app.use(express.static("public"));
+
+// Since categories does not require users to upload an image, we should also
+// include the regular express.urlencoded() middleware
+app.use(express.urlencoded({ extended: true }));
 
 // Add the property "activeRoute" to "app.locals" whenever the route changes
 // If the blog is currently viewing a category, that category will be set in "app.locals"
@@ -218,7 +230,11 @@ app.get("/posts", (req, res) => {
 
   returnedPromise
     .then((data) => {
-      res.render("posts", { posts: data });
+      if (data.length > 0) {
+        res.render("posts", { posts: data });
+      } else {
+        res.render("posts", { message: "no results" });
+      }
     })
     .catch((err) => {
       res.render("posts", { message: "no results" });
@@ -232,7 +248,11 @@ app.get("/post/:id", (req, res) => {
   blogData
     .getPostById(postId)
     .then((data) => {
-      res.render("posts", { posts: data });
+      if (data.length > 0) {
+        res.render("posts", { posts: data });
+      } else {
+        res.render("posts", { message: "no results" });
+      }
     })
     .catch((err) => {
       res.render("posts", { message: "no results" });
@@ -244,48 +264,117 @@ app.get("/categories", (req, res) => {
   blogData
     .getCategories()
     .then((data) => {
-      res.render("categories", { categories: data });
+      if (data.length > 0) {
+        res.render("categories", { categories: data });
+      } else {
+        res.render("categories", { message: "no results" });
+      }
     })
     .catch((err) => {
       res.render("categories", { message: "no results" });
     });
 });
 
+// This route simply sends the file "/views/addCategory.html"
+app.get("/categories/add", (req, res) => {
+  res.render("addCategory");
+});
+
+// POST route for adding a category
+app.post("/categories/add", (req, res) => {
+  blogData
+    .addCategory(req.body)
+    .then(() => {
+      res.redirect("/categories");
+    })
+    .catch((err) => {
+      res.status(500).send("Error adding category");
+    });
+});
+
+// GET route for deleting a category by id
+app.get("/categories/delete/:id", (req, res) => {
+  let categoryId = req.params.id;
+
+  blogData
+    .deleteCategoryById(categoryId)
+    .then(() => {
+      res.redirect("/categories");
+    })
+    .catch((err) => {
+      res.status(500).send("Unable to remove category / category not found");
+    });
+});
+
+// GET route for deleting a post by id
+app.get("/posts/delete/:id", (req, res) => {
+  let postId = req.params.id;
+
+  blogData
+    .deletePostById(postId)
+    .then(() => {
+      res.redirect("/posts");
+    })
+    .catch((err) => {
+      res.status(500).send("Unable to remove post / post not found");
+    });
+});
+
 // This route simply sends the file "/views/addPost.html"
 app.get("/posts/add", (req, res) => {
-  res.render("addPost");
+  blogData
+    .getCategories()
+    .then((data) => {
+      res.render("addPost", { categories: data });
+    })
+    .catch((err) => {
+      res.render("addPost", { categories: [] });
+    });
 });
 
 // Most of this function was provided
 app.post("/posts/add", upload.single("featureImage"), (req, res) => {
-  let streamUpload = (req) => {
-    return new Promise((resolve, reject) => {
-      let stream = cloudinary.uploader.upload_stream((error, result) => {
-        if (result) {
-          resolve(result);
-        } else {
-          reject(error);
-        }
+  if (req.file) {
+    let streamUpload = (req) => {
+      return new Promise((resolve, reject) => {
+        let stream = cloudinary.uploader.upload_stream((error, result) => {
+          if (result) {
+            resolve(result);
+          } else {
+            reject(error);
+          }
+        });
+
+        streamifier.createReadStream(req.file.buffer).pipe(stream);
       });
+    };
 
-      streamifier.createReadStream(req.file.buffer).pipe(stream);
+    async function upload(req) {
+      let result = await streamUpload(req);
+      console.log(result);
+      return result;
+    }
+
+    upload(req).then((uploaded) => {
+      processPost(uploaded.url);
     });
-  };
-
-  async function upload(req) {
-    let result = await streamUpload(req);
-    console.log(result);
-    return result;
+  } else {
+    processPost("");
   }
 
-  upload(req).then((uploaded) => {
-    req.body.featureImage = uploaded.url;
+  // Process the req.body and add it as a new Blog Post before redirecting to /posts
+  function processPost(imageUrl) {
+    req.body.featureImage = imageUrl;
 
-    // Process the req.body and add it as a new Blog Post before redirecting to /posts
-    blogData.addPost(req.body).then((postData) => {
-      res.redirect("/posts");
-    });
-  });
+    blogData
+      .addPost(req.body)
+      .then((post) => {
+        res.redirect("/posts");
+      })
+      .catch((err) => {
+        res.status(500).send(err);
+      });
+  }
 });
 
 // Any other routes will return a custom message with an HTTP status code
