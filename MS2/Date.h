@@ -52,6 +52,12 @@ namespace sdds {
 		int getMinute() const;
 		bool getDateOnly() const;
 
+		void setYear(int year);
+		void setMonth(int month);
+		void setDay(int day);
+		void setHour(int hour);
+		void setMinute(int minute);
+
 		void print(std::ostream& ostr) const;
 	};
 	std::ostream& operator<<(std::ostream& ostr, const Date& rhs);

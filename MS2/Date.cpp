@@ -64,7 +64,7 @@ namespace sdds {
 			m_error = "Invalid Hour";
 		}
 		else if (!m_dateOnly && (minute < 0 || minute > 59)) {
-			m_error = "Invalid Minute";
+			m_error = "Invlid Minute";
 		}
 	}
 
@@ -132,6 +132,26 @@ namespace sdds {
 		return m_dateOnly;
 	}
 
+	void Date::setYear(int year) {
+		m_year = year;
+	}
+
+	void Date::setMonth(int month) {
+		m_month = month;
+	}
+
+	void Date::setDay(int day) {
+		m_day = day;
+	}
+
+	void Date::setHour(int hour) {
+		m_hour = hour;
+	}
+
+	void Date::setMinute(int minute) {
+		m_minute = minute;
+	}
+
 	void Date::print(std::ostream& ostr) const {
 		ostr << getYear() << '/';
 		ostr.fill('0');
@@ -153,7 +173,7 @@ namespace sdds {
 			rhs.print(ostr);
 		}
 		else {
-			ostr << rhs.error().getMessage() << " (";
+			ostr << rhs.error().getMessage() << "(";
 			rhs.print(ostr);
 			ostr << ")";
 		}
@@ -164,39 +184,90 @@ namespace sdds {
 		int year, month, day, hour, minute;
 		char delimiter;
 
-		if (!(istr >> year)) {
+		istr >> year;
+		if (istr.fail()) {
 			rhs.error() = "Cannot read year entry";
 			istr.clear();
 			istr.ignore(1000, '\n');
-		}
-		else if (!(istr >> delimiter >> month)) {
-			rhs.error() = "Cannot read month entry";
-			istr.clear();
-			istr.ignore(1000, '\n');
-		}
-		else if (!(istr >> delimiter >> day)) {
-			rhs.error() = "Cannot read day entry";
-			istr.clear();
-			istr.ignore(1000, '\n');
-		}
-		else if (!rhs.getDateOnly()) {
-			if (!(istr >> delimiter >> hour)) {
-				rhs.error() = "Cannot read hour entry";
-				istr.clear();
-				istr.ignore(1000, '\n');
-			}
-			else if (!(istr >> delimiter >> minute)) {
-				rhs.error() = "Cannot read minute entry";
-				istr.clear();
-				istr.ignore(1000, '\n');
-			}
-			else {
-				rhs = Date(year, month, day, hour, minute);
-			}
+			rhs.setYear(0);
+			rhs.setMonth(0);
+			rhs.setDay(0);
+			rhs.setHour(0);
+			rhs.setMinute(0);
 		}
 		else {
-			rhs = Date(year, month, day);
+			istr >> delimiter >> month;
+			if (istr.fail()) {
+				rhs.error() = "Cannot read month entry";
+				istr.clear();
+				istr.ignore(1000, '\n');
+				rhs.setMonth(0);
+				rhs.setDay(0);
+				rhs.setHour(0);
+				rhs.setMinute(0);
+			}
+			else {
+				istr >> delimiter >> day;
+				if (istr.fail()) {
+					rhs.error() = "Cannot read day entry";
+					istr.clear();
+					istr.ignore(1000, '\n');
+					rhs.setDay(0);
+					rhs.setHour(0);
+					rhs.setMinute(0);
+				}
+				else {
+					rhs.setYear(year);
+					rhs.setMonth(month);
+					rhs.setDay(day);
+
+					if (!rhs.getDateOnly()) {
+						istr >> delimiter >> hour;
+						if (istr.fail()) {
+							rhs.error() = "Cannot read hour entry";
+							istr.clear();
+							istr.ignore(1000, '\n');
+							rhs.setHour(0);
+							rhs.setMinute(0);
+						}
+						else {
+							istr >> delimiter >> minute;
+							if (istr.fail()) {
+								rhs.error() = "Cannot read minute entry";
+								istr.clear();
+								istr.ignore(1000, '\n');
+								rhs.setMinute(0);
+							}
+							else {
+								rhs.setHour(hour);
+								rhs.setMinute(minute);
+							}
+						}
+					}
+					else {
+						rhs.setHour(0);
+						rhs.setMinute(0);
+					}
+
+					if (year < MIN_YEAR || year > MAX_YEAR) {
+						rhs.error() = "Invalid Year";
+					}
+					else if (month < 1 || month > 12) {
+						rhs.error() = "Invalid Month";
+					}
+					else if (day < 1 || day > daysOfMonth(year, month)) {
+						rhs.error() = "Invalid Day";
+					}
+					else if (!rhs.getDateOnly() && (hour < 0 || hour > 23)) {
+						rhs.error() = "Invalid Hour";
+					}
+					else if (!rhs.getDateOnly() && (minute < 0 || minute > 59)) {
+						rhs.error() = "Invlid Minute";
+					}
+				}
+			}
 		}
+
 		return istr;
 	}
 }
