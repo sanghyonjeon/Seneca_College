@@ -51,6 +51,8 @@ namespace sdds {
 		int getHour() const;
 		int getMinute() const;
 		bool getDateOnly() const;
+
+		void print(std::ostream& ostr) const;
 	};
 	std::ostream& operator<<(std::ostream& ostr, const Date& rhs);
 	std::istream& operator>>(std::istream& istr, Date& rhs);

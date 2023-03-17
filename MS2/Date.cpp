@@ -27,7 +27,7 @@ namespace sdds {
 		*this = Date(year, month, day, hour, minute).dateOnly(false);
 	}
 
-	Date::Date(int year, int month, int day) {\
+	Date::Date(int year, int month, int day) {
 		*this = Date(year, month, day, 0, 0).dateOnly(true);
 
 		// Check the date and time validity and set the error message accordingly
@@ -132,24 +132,30 @@ namespace sdds {
 		return m_dateOnly;
 	}
 
+	void Date::print(std::ostream& ostr) const {
+		ostr << getYear() << '/';
+		ostr.fill('0');
+		ostr.width(2);
+		ostr << getMonth() << '/';
+		ostr.width(2);
+		ostr << getDay();
+		if (!getDateOnly()) {
+			ostr << ", ";
+			ostr.width(2);
+			ostr << getHour() << ':';
+			ostr.width(2);
+			ostr << getMinute();
+		}
+	}
+
 	std::ostream& operator<<(std::ostream& ostr, const Date& rhs) {
 		if (rhs) {
-			ostr << rhs.getYear() << '/';
-			ostr.fill('0');
-			ostr.width(2);
-			ostr << rhs.getMonth() << '/';
-			ostr.width(2);
-			ostr << rhs.getDay();
-			if (!rhs.getDateOnly()) {
-				ostr << ", ";
-				ostr.width(2);
-				ostr << rhs.getHour() << ':';
-				ostr.width(2);
-				ostr << rhs.getMinute();
-			}
+			rhs.print(ostr);
 		}
 		else {
-			ostr << rhs.error().getMessage();
+			ostr << rhs.error().getMessage() << " (";
+			rhs.print(ostr);
+			ostr << ")";
 		}
 		return ostr;
 	}
