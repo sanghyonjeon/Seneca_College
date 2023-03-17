@@ -29,7 +29,7 @@ namespace sdds {
 	public:
 		Date();
 		Date(int year, int month, int day);
-		Date(int year, int month, int day, int hour, int minute);
+		Date(int year, int month, int day, int hour, int minute = 0);
 		
 		bool operator==(const Date& rhs) const;
 		bool operator!=(const Date& rhs) const;

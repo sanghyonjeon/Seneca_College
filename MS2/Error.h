@@ -23,6 +23,7 @@ namespace sdds {
 	public:
 		Error();
 		Error(const char* message);
+		Error(const Error& src);
 		~Error();
 
 		Error& operator=(const Error& src);

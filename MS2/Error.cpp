@@ -33,6 +33,16 @@ namespace sdds {
 		}
 	}
 
+	Error::Error(const Error& src) {
+		if (src.m_message != nullptr && src.m_message[0] != '\0') {
+			m_message = new char[strlen(src.m_message) + 1];
+			strcpy(m_message, src.m_message);
+		}
+		else {
+			m_message = nullptr;
+		}
+	}
+
 	Error::~Error() {
 		delete[] m_message;
 	}
@@ -78,7 +88,7 @@ namespace sdds {
 	}
 
 	std::ostream& operator<<(std::ostream& ostr, const Error& rhs) {
-		if (!rhs) {
+		if (rhs) {
 			ostr << rhs.getMessage();
 		}
 		return ostr;

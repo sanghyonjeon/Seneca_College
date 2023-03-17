@@ -24,12 +24,11 @@ namespace sdds {
 	Date::Date() {
 		int year, month, day, hour, minute;
 		getSystemDate(year, month, day, hour, minute, false);
-		*this = Date(year, month, day, hour, minute);
+		*this = Date(year, month, day, hour, minute).dateOnly(false);
 	}
 
-	Date::Date(int year, int month, int day) {
-		*this = Date(year, month, day, 0, 0);
-		m_dateOnly = true;
+	Date::Date(int year, int month, int day) {\
+		*this = Date(year, month, day, 0, 0).dateOnly(true);
 
 		// Check the date and time validity and set the error message accordingly
 		if (year < MIN_YEAR || year > MAX_YEAR) {
@@ -49,7 +48,7 @@ namespace sdds {
 		m_day = day;
 		m_hour = hour;
 		m_minute = minute;
-		m_dateOnly = false;
+		dateOnly(false);
 
 		// Check the date and time validity and set the error message accordingly
 		if (year < MIN_YEAR || year > MAX_YEAR) {
