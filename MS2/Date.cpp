@@ -186,20 +186,30 @@ namespace sdds {
 
 		m_error.clear();
 		istr >> m_year;
-		if (!istr) m_error = "Cannot read year entry";
+		if (!istr) {
+			m_error = "Cannot read year entry";
+		}
 		istr.ignore();
 		istr >> m_month;
-		if (!m_error && !istr) m_error = "Cannot read month entry";
+		if (!m_error && !istr) {
+			m_error = "Cannot read month entry";
+		}
 		istr.ignore();
 		istr >> m_day;
-		if (!m_error && !istr) m_error = "Cannot read day entry";
+		if (!m_error && !istr) {
+			m_error = "Cannot read day entry";
+		}
 		if (!getDateOnly()) {
 			istr.ignore();
 			istr >> m_hour;
-			if (!m_error && !istr) m_error = "Cannot read hour entry";
+			if (!m_error && !istr) {
+				m_error = "Cannot read hour entry";
+			}
 			istr.ignore();
 			istr >> m_minute;
-			if (!m_error && !istr) m_error = "Cannot read minute entry";
+			if (!m_error && !istr) {
+				m_error = "Cannot read minute entry";
+			}
 		}
 		else {
 			m_hour = m_minute = 0;
