@@ -59,6 +59,7 @@ namespace sdds {
 		void setMinute(int minute);
 
 		void print(std::ostream& ostr) const;
+		std::istream& rread(std::istream& istr);
 	};
 	std::ostream& operator<<(std::ostream& ostr, const Date& rhs);
 	std::istream& operator>>(std::istream& istr, Date& rhs);

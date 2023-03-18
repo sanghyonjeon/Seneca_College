@@ -102,7 +102,7 @@ namespace sdds {
 	}
 
 	Date::operator bool() const {
-		return bool(m_error) == false;
+		return !m_error;
 	}
 
 	const Error& Date::error() const {
@@ -112,7 +112,7 @@ namespace sdds {
 	Error& Date::error() {
 		return m_error;
 	}
-
+	
 	int Date::getYear() const {
 		return m_year;
 	}
@@ -180,94 +180,51 @@ namespace sdds {
 		return ostr;
 	}
 
-	std::istream& operator>>(std::istream& istr, Date& rhs) {
-		int year, month, day, hour, minute;
-		char delimiter;
+	std::istream& Date::rread(std::istream& istr) {
+		m_year = m_month = m_day = m_hour = m_minute = 0;
+		m_error = "NULL Date";
 
-		istr >> year;
-		if (istr.fail()) {
-			rhs.error() = "Cannot read year entry";
-			istr.clear();
-			istr.ignore(1000, '\n');
-			rhs.setYear(0);
-			rhs.setMonth(0);
-			rhs.setDay(0);
-			rhs.setHour(0);
-			rhs.setMinute(0);
+		m_error.clear();
+		istr >> m_year;
+		if (!istr) m_error = "Cannot read year entry";
+		istr.ignore();
+		istr >> m_month;
+		if (!m_error && !istr) m_error = "Cannot read month entry";
+		istr.ignore();
+		istr >> m_day;
+		if (!m_error && !istr) m_error = "Cannot read day entry";
+		if (!getDateOnly()) {
+			istr.ignore();
+			istr >> m_hour;
+			if (!m_error && !istr) m_error = "Cannot read hour entry";
+			istr.ignore();
+			istr >> m_minute;
+			if (!m_error && !istr) m_error = "Cannot read minute entry";
 		}
 		else {
-			istr >> delimiter >> month;
-			if (istr.fail()) {
-				rhs.error() = "Cannot read month entry";
-				istr.clear();
-				istr.ignore(1000, '\n');
-				rhs.setMonth(0);
-				rhs.setDay(0);
-				rhs.setHour(0);
-				rhs.setMinute(0);
+			m_hour = m_minute = 0;
+		}
+		if (istr) {
+			if (m_year < MIN_YEAR || m_year > MAX_YEAR) {
+				error() = "Invalid Year";
 			}
-			else {
-				istr >> delimiter >> day;
-				if (istr.fail()) {
-					rhs.error() = "Cannot read day entry";
-					istr.clear();
-					istr.ignore(1000, '\n');
-					rhs.setDay(0);
-					rhs.setHour(0);
-					rhs.setMinute(0);
-				}
-				else {
-					rhs.setYear(year);
-					rhs.setMonth(month);
-					rhs.setDay(day);
-
-					if (!rhs.getDateOnly()) {
-						istr >> delimiter >> hour;
-						if (istr.fail()) {
-							rhs.error() = "Cannot read hour entry";
-							istr.clear();
-							istr.ignore(1000, '\n');
-							rhs.setHour(0);
-							rhs.setMinute(0);
-						}
-						else {
-							istr >> delimiter >> minute;
-							if (istr.fail()) {
-								rhs.error() = "Cannot read minute entry";
-								istr.clear();
-								istr.ignore(1000, '\n');
-								rhs.setMinute(0);
-							}
-							else {
-								rhs.setHour(hour);
-								rhs.setMinute(minute);
-							}
-						}
-					}
-					else {
-						rhs.setHour(0);
-						rhs.setMinute(0);
-					}
-
-					if (year < MIN_YEAR || year > MAX_YEAR) {
-						rhs.error() = "Invalid Year";
-					}
-					else if (month < 1 || month > 12) {
-						rhs.error() = "Invalid Month";
-					}
-					else if (day < 1 || day > daysOfMonth(year, month)) {
-						rhs.error() = "Invalid Day";
-					}
-					else if (!rhs.getDateOnly() && (hour < 0 || hour > 23)) {
-						rhs.error() = "Invalid Hour";
-					}
-					else if (!rhs.getDateOnly() && (minute < 0 || minute > 59)) {
-						rhs.error() = "Invlid Minute";
-					}
-				}
+			else if (m_month < 1 || m_month > 12) {
+				error() = "Invalid Month";
+			}
+			else if (m_day < 1 || m_day > daysOfMonth(m_year, m_month)) {
+				error() = "Invalid Day";
+			}
+			else if (!getDateOnly() && (m_hour < 0 || m_hour > 23)) {
+				error() = "Invalid Hour";
+			}
+			else if (!getDateOnly() && (m_minute < 0 || m_minute > 59)) {
+				error() = "Invlid Minute";
 			}
 		}
-
 		return istr;
+	}
+
+	std::istream& operator>>(std::istream& istr, Date& rhs) {
+		return rhs.rread(istr);
 	}
 }
