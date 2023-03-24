@@ -13,8 +13,23 @@ professor provided to complete my workshops and assignments.
 */
 #ifndef SDDS_VIDEO_H_
 #define SDDS_VIDEO_H_
+#include "Media.h"
 
 namespace sdds {
+    class Video : public Media {
+        int m_length;
+    
+    protected:
+        int get() const;
+    
+    public:
+        Video();
+        Video(int length);
 
+        Video(const Video& src) = delete;
+        Video& operator=(const Video& src) = delete;
+
+        void load(std::istream& is);
+    };
 }
 #endif // !SDDS_VIDEO_H_

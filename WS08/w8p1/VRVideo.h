@@ -13,8 +13,19 @@ professor provided to complete my workshops and assignments.
 */
 #ifndef SDDS_VRVIDEO_H_
 #define SDDS_VRVIDEO_H_
+#include "Video.h"
 
 namespace sdds {
+    class VRVideo : public Video {
+        char* m_equipment;
+    
+    public:
+        VRVideo();
+        VRVideo(int length, const char* equipment);
+        ~VRVideo();
 
+        void load(std::istream& is);
+        std::ostream& play(std::ostream& os) const;
+    };
 }
 #endif // !SDDS_VRVIDEO_H_
