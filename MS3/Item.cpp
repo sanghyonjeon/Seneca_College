@@ -223,7 +223,6 @@ namespace sdds {
 		char sku[MAX_SKU_LEN + 1];
 		char* itemName = nullptr;
 		double price;
-		char taxedChar;
 		bool taxed;
 		int quantity;
 
@@ -233,8 +232,7 @@ namespace sdds {
 			ifs.getline(itemName, MAX_NAME_LEN, ',');
 			ifs >> price;
 			ifs.ignore();
-			ifs >> taxedChar;
-			taxed = (taxedChar == '1');
+			ifs >> taxed;
 			ifs.ignore();
 			ifs >> quantity;
 			ifs.ignore();
@@ -269,7 +267,11 @@ namespace sdds {
 	}
 
 	std::ostream& Item::bprint(std::ostream& os) const {
-		os << "| " << setw(20) << left << string(m_itemName).substr(0, 20)
+		char buffer[21];
+		memcpy(buffer, m_itemName, 20);
+		buffer[20] = '\0';
+
+		os << "| " << setw(20) << left << buffer
 			<< "| " << setw(9) << right << fixed << setprecision(2) << cost()
 			<< "| " << setw(2) << (m_taxed ? "T" : " ") << "|"
 			<< endl;

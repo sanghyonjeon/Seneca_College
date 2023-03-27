@@ -35,6 +35,7 @@ namespace sdds {
 		const char* getMessage() const;
 
 		bool isClear() const;
+		void setMessage(const char* message);
 	};
 	std::ostream& operator<<(std::ostream& ostr, const Error& rhs);
 }

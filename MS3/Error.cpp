@@ -87,6 +87,12 @@ namespace sdds {
 		return m_message;
 	}
 
+	void Error::setMessage(const char* str) {
+		delete[] m_message;
+		m_message = new char[strlen(str) + 1];
+		strcpy(m_message, str);
+	}
+
 	bool Error::isClear() const {
 		return (m_message == nullptr || m_message[0] == '\0');
 	}
