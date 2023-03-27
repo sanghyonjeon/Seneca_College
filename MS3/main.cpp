@@ -11,6 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include "Item.h"
+#include "POS.h"
 
 using namespace sdds;
 using namespace std;
@@ -29,7 +30,7 @@ void displayFile(const char* name) {
 }
 Tool getTool() {
    Tool T;
-   cout << "Please enter the Tool infomation: " << endl;
+   cout << "Please enter the Tool information: " << endl;
    cin >> T;
    return T;
 }
@@ -100,7 +101,7 @@ int main() {
          if(M)
             cout << M << endl;
          else
-            cout << "Rocord number " << cnt++ << " " << M << endl;
+            cout << "Record number " << cnt++ << " " << M << endl;
       }
    }
    return 0;
