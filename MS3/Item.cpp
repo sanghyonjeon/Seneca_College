@@ -100,6 +100,7 @@ namespace sdds {
 		return *this;
 	}
 
+	// LOOK OVER THIS **********************************************************
 	std::istream& Item::read(std::istream& is) {
 		m_error.clear();
 
@@ -219,6 +220,7 @@ namespace sdds {
 		return os;
 	}
 
+	// LOOK OVER THIS **********************************************************
 	std::ifstream& Item::load(std::ifstream& ifs) {
 		char sku[MAX_SKU_LEN + 1];
 		char* itemName = nullptr;
