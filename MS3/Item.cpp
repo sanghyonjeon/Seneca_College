@@ -100,12 +100,11 @@ namespace sdds {
 		return *this;
 	}
 
-	// LOOK OVER THIS **********************************************************
 	std::istream& Item::read(std::istream& is) {
 		m_error.clear();
 
-		char sku[MAX_SKU_LEN + 1];
-		char name[MAX_NAME_LEN + 1];
+		char sku[MAX_SKU_LEN + 2];
+		char name[MAX_NAME_LEN + 2];
 		double price;
 		char taxed;
 		int quantity;
@@ -116,7 +115,7 @@ namespace sdds {
 			cout << "\n> ";
 			is.getline(sku, MAX_SKU_LEN + 2);
 			if (strlen(sku) > MAX_SKU_LEN) {
-				cout << "SKU too long";
+				cout << ERROR_POS_SKU;
 			}
 		} while (strlen(sku) > MAX_SKU_LEN);
 
@@ -126,7 +125,7 @@ namespace sdds {
 			cout << "\n> ";
 			is.getline(name, MAX_NAME_LEN + 2);
 			if (strlen(name) > MAX_NAME_LEN) {
-				cout << "Item name too long";
+				cout << ERROR_POS_NAME;
 				is.clear();
 				is.ignore(10000, '\n');
 
@@ -139,7 +138,7 @@ namespace sdds {
 			cout << "\n> ";
 			is >> price;
 			if (is.fail() || price < 0) {
-				cout << "Invalid price value";
+				cout << ERROR_POS_PRICE;
 				is.clear();
 				is.ignore(10000, '\n');
 			}
@@ -166,7 +165,7 @@ namespace sdds {
 			cout << "\n> ";
 			is >> quantity;
 			if (is.fail() || quantity < 1 || quantity > 99) {
-				cout << "Invalid quantity value";
+				cout << ERROR_POS_QTY;
 				is.clear();
 				is.ignore(10000, '\n');
 			}
@@ -190,28 +189,39 @@ namespace sdds {
 	}
 
 	std::ostream& Item::write(std::ostream& os) const {
+		char itemNameSubstring[21];
+		strncpy(itemNameSubstring, m_itemName, 20);
+		itemNameSubstring[20] = '\0';
+
 		if (m_error.isClear()) {
 			if (m_displayType == POS_LIST) {
-				os << '|' << setw(20) << left << m_itemName;
-				os << '|' << setw(7) << right << fixed << setprecision(2) << cost();
-				os << '|' << setw(3) << right << (m_taxed ? "T" : " ") << '|';
+				os << setw(7) << left << m_sku;
+				os << '|' << setw(20) << left << itemNameSubstring;
+				os << '|' << setw(7) << right << fixed << setprecision(2) << m_price;
+				os << '|' << setw(3) << left << (m_taxed ? " X" : " ") << '|';
 				os << setw(4) << right << quantity() << '|';
-				os << setw(9) << right << cost() << '|';
+				os << setw(9) << right << cost() * quantity() << '|';
 			}
 			else if (m_displayType == POS_FORM) {
 				os << "=============v" << endl;
-				os << setw(12) << left << "Name:" << m_itemName << endl;
-				os << setw(12) << left << "Sku:" << m_sku << endl;
-				os << setw(12) << left << "Price:" << fixed << setprecision(2) << m_price << endl;
+				os << setw(13) << left << "Name:" << m_itemName << endl;
+				os << setw(13) << left << "Sku:" << m_sku << endl;
+				os << setw(13) << left << "Price:" << fixed << setprecision(2) << m_price << endl;
 
 				if (m_taxed) {
-					os << setw(12) << left << "Price + tax:" << fixed << setprecision(2) << cost() << endl;
+					os << setw(13) << left << "Price + tax:" << fixed << setprecision(2) << cost() << endl;
 				}
 				else {
-					os << setw(12) << left << "Price + tax:" << "N/A" << endl;
+					os << setw(13) << left << "Price + tax:" << "N/A" << endl;
 				}
 
-				os << setw(12) << left << "Stock Qty:" << quantity() << endl;
+				os << setw(13) << left << "Stock Qty:";
+				if (m_quantity == 0) {
+					os << ERROR_POS_STOCK << endl;
+				}
+				else {
+					os << quantity() << endl;
+				}
 			}
 		}
 		else {
@@ -220,36 +230,58 @@ namespace sdds {
 		return os;
 	}
 
-	// LOOK OVER THIS **********************************************************
 	std::ifstream& Item::load(std::ifstream& ifs) {
-		char sku[MAX_SKU_LEN + 1];
-		char* itemName = nullptr;
-		double price;
-		bool taxed;
-		int quantity;
+		m_error.clear();
+		if (ifs) {
+			char sku[MAX_SKU_LEN + 2]{};
+			char name[MAX_NAME_LEN + 2]{};
+			double price{};
+			int qty{};
+			bool tax{};
 
-		if (ifs.get(sku, MAX_SKU_LEN + 1, ',')) {
-			ifs.ignore();
-			itemName = new char[MAX_NAME_LEN + 1];
-			ifs.getline(itemName, MAX_NAME_LEN, ',');
+			ifs.get(sku, MAX_SKU_LEN + 2, ',');
+			ifs.ignore(1000, ',');
+			ifs.get(name, MAX_NAME_LEN + 2, ',');
+			ifs.ignore(1000, ',');
 			ifs >> price;
 			ifs.ignore();
-			ifs >> taxed;
+			ifs >> tax;
 			ifs.ignore();
-			ifs >> quantity;
-			ifs.ignore();
+			ifs >> qty;
 
-			strncpy(m_sku, sku, MAX_SKU_LEN);
-			m_sku[MAX_SKU_LEN] = '\0';
+			if (ifs) {
+				// Validate SKU
+				if (strlen(sku) > MAX_SKU_LEN) {
+					m_error = ERROR_POS_SKU;
+				}
+				// Validate Name
+				else if (strlen(name) > MAX_NAME_LEN) {
+					m_error = ERROR_POS_NAME;
+				}
+				// Validate Price
+				else if (price < 0) {
+					m_error = ERROR_POS_PRICE;
+				}
+				// Validate Quantity
+				else if (qty < 1 || qty > 99) {
+					m_error = ERROR_POS_QTY;
+				}
+				// If no validation errors, assign attributes
+				else {
+					strncpy(m_sku, sku, MAX_SKU_LEN);
+					m_sku[MAX_SKU_LEN] = '\0';
 
-			delete[] m_itemName;
-			m_itemName = itemName;
+					delete[] m_itemName;
+					m_itemName = new char[MAX_NAME_LEN + 1];
+					strncpy(m_itemName, name, MAX_NAME_LEN);
+					m_itemName[MAX_NAME_LEN] = '\0';
 
-			m_price = price;
-			m_taxed = taxed;
-			m_quantity = quantity;
+					m_price = price;
+					m_taxed = tax;
+					m_quantity = qty;
+				}
+			}
 		}
-
 		return ifs;
 	}
 
@@ -258,6 +290,8 @@ namespace sdds {
 			ofs << itemType() << ',';
 			ofs << m_sku << ',';
 			ofs << m_itemName << ',';
+			ofs.setf(ios::fixed);
+			ofs.precision(2);
 			ofs << m_price << ',';
 			ofs << (m_taxed ? "1" : "0") << ',';
 			ofs << quantity();
@@ -269,19 +303,19 @@ namespace sdds {
 	}
 
 	std::ostream& Item::bprint(std::ostream& os) const {
-		char buffer[21];
-		memcpy(buffer, m_itemName, 20);
-		buffer[20] = '\0';
+		char itemNameSubstring[21];
+		strncpy(itemNameSubstring, m_itemName, 20);
+		itemNameSubstring[20] = '\0';
 
-		os << "| " << setw(20) << left << buffer
-			<< "| " << setw(9) << right << fixed << setprecision(2) << cost()
-			<< "| " << setw(2) << (m_taxed ? "T" : " ") << "|"
+		os << "| " << setw(20) << left << itemNameSubstring
+			<< "| " << setw(9) << right << fixed << setprecision(2) << cost() << " "
+			<< "| " << setw(4) << (m_taxed ? "T  " : " ") << "|"
 			<< endl;
 		return os;
 	}
 
 	double& operator+=(double& lhs, const Item& rhs) {
-		lhs += rhs.cost();
+		lhs += rhs.cost() * rhs.quantity();
 		return lhs;
 	}
 }
