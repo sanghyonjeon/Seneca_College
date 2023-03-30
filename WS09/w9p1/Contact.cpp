@@ -56,8 +56,6 @@ namespace sdds {
 
             os << endl;
 
-            cout << m_address << m_city << m_province << m_postalCode;
-
             char* fullAddress = new char[strLen(m_address) + strLen(m_city) + strLen(m_province) + strLen(m_postalCode) + 5];
             fullAddress[0] = '\0';
             strCat(fullAddress, m_address);
@@ -142,7 +140,6 @@ namespace sdds {
 
     void Contact::setPostalCode(const char* postalCode) {
         if (postalCode && strLen(postalCode) == MAX_POSTALCODE_LENGTH) {
-            ///*
             char temp[MAX_POSTALCODE_LENGTH + 2];
 
             strCpy(temp, postalCode);
@@ -154,8 +151,6 @@ namespace sdds {
             temp[3] = ' ';
 
             strCpy(m_postalCode, temp);
-            //*/
-            //strCpy(m_postalCode, postalCode);
         }
         else {
             m_postalCode[0] = '\0';
