@@ -1,17 +1,17 @@
 /******************************************************************************
-                             WEB322 – Assignment 5
+                             WEB322 – Assignment 6
 Full Name  : Sang Hyon Jeon
 Student ID#: 113552194
 Email      : shjeon5@myseneca.ca
 Section    : NGG
-Date       : March 24, 2023
+Date       : April 7, 2023
 
 Authenticity Declaration:
 I declare that this assignment is my own work in accordance with Seneca
 Academic Policy. I have done all the coding by myself and only copied the code
 that my professor provided to complete this assignment.
 
-Online (Cyclic) Link: https://cyan-important-sea-urchin.cyclic.app
+Online (Cyclic) Link:   
 ******************************************************************************/
 const express = require("express");
 const multer = require("multer");
@@ -21,6 +21,8 @@ const exphbs = require("express-handlebars");
 const stripJs = require("strip-js");
 const path = require("path");
 const blogData = require("./blog-service.js");
+const authData = require("./auth-service.js");
+const clientSessions = require("client-sessions");
 
 // The server must make use of the "express" module
 const app = express();
@@ -91,6 +93,20 @@ app.set("view engine", ".hbs");
 // For your server to correctly return the "/css/main.css" file, the "static"
 // middleware must be used
 app.use(express.static("public"));
+
+app.use(
+  clientSessions({
+    cookieName: "session",
+    secret: "WEB322_Assignment_6",
+    duration: 2 * 60 * 1000, // 2 minutes
+    activeDuration: 60 * 1000, // 1 minute
+  })
+);
+
+app.use(function (req, res, next) {
+  res.locals.session = req.session;
+  next();
+});
 
 // Since categories does not require users to upload an image, we should also
 // include the regular express.urlencoded() middleware
@@ -215,7 +231,7 @@ app.get("/blog/:id", async (req, res) => {
 });
 
 // This route "/posts" gets posts within posts.json by category, minDate, or just all the posts
-app.get("/posts", (req, res) => {
+app.get("/posts", authData.ensureLogin, (req, res, next) => {
   let category = req.query.category;
   let minDate = req.query.minDate;
   let returnedPromise = null;
@@ -242,7 +258,7 @@ app.get("/posts", (req, res) => {
 });
 
 // This route will return a JSON formatted string containing a single post whose id matches the value
-app.get("/post/:id", (req, res) => {
+app.get("/post/:id", authData.ensureLogin, (req, res, next) => {
   let postId = req.params.id;
 
   blogData
@@ -260,7 +276,7 @@ app.get("/post/:id", (req, res) => {
 });
 
 // This route "/categories" gets all categories within the categories.json
-app.get("/categories", (req, res) => {
+app.get("/categories", authData.ensureLogin, (req, res, next) => {
   blogData
     .getCategories()
     .then((data) => {
@@ -276,12 +292,12 @@ app.get("/categories", (req, res) => {
 });
 
 // This route simply sends the file "/views/addCategory.html"
-app.get("/categories/add", (req, res) => {
+app.get("/categories/add", authData.ensureLogin, (req, res, next) => {
   res.render("addCategory");
 });
 
 // POST route for adding a category
-app.post("/categories/add", (req, res) => {
+app.post("/categories/add", authData.ensureLogin, (req, res, next) => {
   blogData
     .addCategory(req.body)
     .then(() => {
@@ -293,7 +309,7 @@ app.post("/categories/add", (req, res) => {
 });
 
 // GET route for deleting a category by id
-app.get("/categories/delete/:id", (req, res) => {
+app.get("/categories/delete/:id", authData.ensureLogin, (req, res, next) => {
   let categoryId = req.params.id;
 
   blogData
@@ -307,7 +323,7 @@ app.get("/categories/delete/:id", (req, res) => {
 });
 
 // GET route for deleting a post by id
-app.get("/posts/delete/:id", (req, res) => {
+app.get("/posts/delete/:id", authData.ensureLogin, (req, res, next) => {
   let postId = req.params.id;
 
   blogData
@@ -321,7 +337,7 @@ app.get("/posts/delete/:id", (req, res) => {
 });
 
 // This route simply sends the file "/views/addPost.html"
-app.get("/posts/add", (req, res) => {
+app.get("/posts/add", authData.ensureLogin, (req, res, next) => {
   blogData
     .getCategories()
     .then((data) => {
@@ -333,48 +349,103 @@ app.get("/posts/add", (req, res) => {
 });
 
 // Most of this function was provided
-app.post("/posts/add", upload.single("featureImage"), (req, res) => {
-  if (req.file) {
-    let streamUpload = (req) => {
-      return new Promise((resolve, reject) => {
-        let stream = cloudinary.uploader.upload_stream((error, result) => {
-          if (result) {
-            resolve(result);
-          } else {
-            reject(error);
-          }
+app.post(
+  "/posts/add",
+  authData.ensureLogin,
+  upload.single("featureImage"),
+  (req, res, next) => {
+    if (req.file) {
+      let streamUpload = (req) => {
+        return new Promise((resolve, reject) => {
+          let stream = cloudinary.uploader.upload_stream((error, result) => {
+            if (result) {
+              resolve(result);
+            } else {
+              reject(error);
+            }
+          });
+
+          streamifier.createReadStream(req.file.buffer).pipe(stream);
         });
+      };
 
-        streamifier.createReadStream(req.file.buffer).pipe(stream);
+      async function upload(req) {
+        let result = await streamUpload(req);
+        console.log(result);
+        return result;
+      }
+
+      upload(req).then((uploaded) => {
+        processPost(uploaded.url);
       });
-    };
-
-    async function upload(req) {
-      let result = await streamUpload(req);
-      console.log(result);
-      return result;
+    } else {
+      processPost("");
     }
 
-    upload(req).then((uploaded) => {
-      processPost(uploaded.url);
-    });
-  } else {
-    processPost("");
+    // Process the req.body and add it as a new Blog Post before redirecting to /posts
+    function processPost(imageUrl) {
+      req.body.featureImage = imageUrl;
+
+      blogData
+        .addPost(req.body)
+        .then((post) => {
+          res.redirect("/posts");
+        })
+        .catch((err) => {
+          res.status(500).send(err);
+        });
+    }
   }
+);
 
-  // Process the req.body and add it as a new Blog Post before redirecting to /posts
-  function processPost(imageUrl) {
-    req.body.featureImage = imageUrl;
+app.get("/login", (req, res) => {
+  res.render("login");
+});
 
-    blogData
-      .addPost(req.body)
-      .then((post) => {
-        res.redirect("/posts");
-      })
-      .catch((err) => {
-        res.status(500).send(err);
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
+app.post("/register", (req, res) => {
+  authData
+    .registerUser(req.body)
+    .then((user) => {
+      res.render("register", { successMessage: "User created" });
+    })
+    .catch((err) => {
+      res.render("register", {
+        errorMessage: err,
+        userName: req.body.userName,
       });
-  }
+    });
+});
+
+app.post("/login", (req, res) => {
+  req.body.userAgent = req.get("User-Agent");
+
+  authData
+    .checkUser(req.body)
+    .then((user) => {
+      req.session.user = {
+        userName: user.userName,
+        email: user.email,
+        loginHistory: user.loginHistory,
+      };
+
+      res.redirect("/posts");
+    })
+    .catch((err) => {
+      res.render("login", { errorMessage: err, userName: req.body.userName });
+    });
+});
+
+app.get("/logout", (req, res) => {
+  req.session.reset();
+  res.redirect("/");
+});
+
+app.get("/userHistory", authData.ensureLogin, (req, res) => {
+  res.render("userHistory");
 });
 
 // Any other routes will return a custom message with an HTTP status code
@@ -384,6 +455,7 @@ app.use(function (req, res, next) {
 
 blogData
   .initialize()
+  .then(authData.initialize)
   .then(() => {
     // The server must output: "Express http server listening on port" to the
     // console, where port is the port the server is currently listening on
