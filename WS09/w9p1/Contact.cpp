@@ -99,24 +99,21 @@ namespace sdds {
     std::istream& Contact::readAddress(std::istream& is) {
         char* address = nullptr;
         char* city = nullptr;
-        char* province = nullptr;
-        char* postalCode = nullptr;
+        char province[MAX_PROVINCE_LENGTH + 1];
+        char postalCode[MAX_POSTALCODE_LENGTH + 1];
 
         address = dynRead(is, ',');
         city = dynRead(is, ',');
-        province = dynRead(is, ',');
-        postalCode = dynRead(is, '\n');
+        is.getline(province, MAX_PROVINCE_LENGTH + 1, ',');
+        is.getline(postalCode, MAX_POSTALCODE_LENGTH + 1, '\n');
 
         setAddress(address);
         setCity(city);
         setProvince(province);
         setPostalCode(postalCode);
 
-        // Free the dynamically allocated memory
         delete[] address;
         delete[] city;
-        delete[] province;
-        delete[] postalCode;
 
         return is;
     }
@@ -139,16 +136,23 @@ namespace sdds {
     }
 
     void Contact::setPostalCode(const char* postalCode) {
-        if (postalCode && strLen(postalCode) == MAX_POSTALCODE_LENGTH) {
+        if (postalCode
+            && (strLen(postalCode) == MAX_POSTALCODE_LENGTH
+                || strLen(postalCode) == MAX_POSTALCODE_LENGTH + 1)) {
             char temp[MAX_POSTALCODE_LENGTH + 2];
 
-            strCpy(temp, postalCode);
+            if (postalCode[3] == ' ') {
+                strCpy(temp, postalCode);
+            }
+            else {
+                strCpy(temp, postalCode);
 
-            temp[7] = '\0';
-            temp[6] = postalCode[5];
-            temp[5] = postalCode[4];
-            temp[4] = postalCode[3];
-            temp[3] = ' ';
+                temp[7] = '\0';
+                temp[6] = postalCode[5];
+                temp[5] = postalCode[4];
+                temp[4] = postalCode[3];
+                temp[3] = ' ';
+            }
 
             strCpy(m_postalCode, temp);
         }
