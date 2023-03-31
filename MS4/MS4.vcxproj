@@ -130,11 +130,11 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="correct_output.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="nonPerInput.csv" />
     <None Include="perishableInput.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="correct_output.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
