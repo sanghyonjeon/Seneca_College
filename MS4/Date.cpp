@@ -153,8 +153,9 @@ namespace sdds {
 	}
 
 	void Date::print(std::ostream& ostr) const {
-		ostr << getYear() << '/';
 		ostr.fill('0');
+		ostr.setf(ios::right);
+		ostr << getYear() << '/';
 		ostr.width(2);
 		ostr << getMonth() << '/';
 		ostr.width(2);

@@ -47,12 +47,6 @@
     <None Include="perishableInput.csv">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="nonPerOutput.csv">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="perishableOutput.csv">
-      <Filter>Resource Files</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="correct_output.txt">

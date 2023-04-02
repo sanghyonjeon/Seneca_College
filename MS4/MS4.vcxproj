@@ -138,9 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="nonPerInput.csv" />
-    <None Include="nonPerOutput.csv" />
     <None Include="perishableInput.csv" />
-    <None Include="perishableOutput.csv" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="correct_output.txt" />
