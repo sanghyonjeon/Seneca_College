@@ -33,6 +33,7 @@ namespace sdds {
         if (is && !is.fail()) {
             Date date;
             cout << "Expiry date (YYYY/MM/DD)" << endl;
+            cout << "> ";
             if (!(is >> date)) {
                 inputValid = false;
             }
