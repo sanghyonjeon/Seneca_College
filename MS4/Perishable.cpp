@@ -57,12 +57,12 @@ namespace sdds {
         if (os && !os.fail()) {
             // If the display type is LIST
             if (m_displayType == POS_LIST) {
-                os << ' ' << ' ' << m_expiryDate << ' ' << '|';
+                os << ' ' << ' ' << m_expiryDate << ' ' << '|' << left;
             }
             // If the display type is FORM
             else if (m_displayType == POS_FORM) {
                 os << "Expiry date: " << m_expiryDate << endl;
-                os << "=============^" << endl;
+                os << "=============^" << endl << left;
             }
         }
 

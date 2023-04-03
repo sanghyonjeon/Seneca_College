@@ -32,7 +32,7 @@ namespace sdds {
         if (os) {
             // If the display type is LIST
             if (m_displayType == POS_LIST) {
-                os << "     N / A   |";
+                os << "     N / A   |" << left;
             }
             // If the display type is FORM
             else if (m_displayType == POS_FORM) {
