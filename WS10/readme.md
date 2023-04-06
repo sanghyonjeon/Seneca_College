@@ -1,5 +1,7 @@
 # Workshop 10: Function Templates
 
+- (v1.1 ) added "or equal" to the validation condition.
+
 In this workshop, you are to code a function template for validating if a value is greater than a minimum value.
 
 ## Learning Outcomes
@@ -91,7 +93,7 @@ If you have any additional custom code, (i.e. functions, classes etc) that you w
 
 # Part 1 (100%)
 
-Create a function template called validate in a file called `validate.h` that accepts four arguments (a minimum value, an array of test values, the number of elements in the array, and an array of Boolean for validation results) and returns a bool that is true only if ALL the test-value elements are greater than the minimum, and false otherwise. 
+Create a function template called validate in a file called `validate.h` that accepts four arguments (a minimum value, an array of test values, the number of elements in the array, and an array of Boolean for validation results) and returns a bool that is true only if ALL the test-value elements are greater than or equal to the minimum, and false otherwise. 
 Also, as the validation test is being done on each element, the result of validation is saved for each element in the corresponding (same index) boolean array element. So, the caller program can determine exactly which elements of the testValue array are valid or invalid. 
 Make sure the function is designed in a way that all test objects (min, and test elements) are not copied or modified in the function. 
 

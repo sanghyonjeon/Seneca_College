@@ -11,10 +11,24 @@ I have done all the coding by myself and only copied the code that my
 professor provided to complete my workshops and assignments.
 *****************************************************************************
 */
-#ifndef SDDS_VALIDATE_H_
-#define SDDS_VALIDATE_H_
+#ifndef SICT_VALIDATE_H_
+#define SICT_VALIDATE_H_
 
-namespace sdds {
+namespace sict {
+    template <typename T>
+    bool validate(const T& minValue, const T testValues[], int numElements, bool results[]) {
+        bool allValid = true;
 
+        for (int i = 0; i < numElements; i++) {
+            if (testValues[i] >= minValue) {
+                results[i] = true;
+            }
+            else {
+                results[i] = false;
+                allValid = false;
+            }
+        }
+        return allValid;
+    }
 }
-#endif // !SDDS_VALIDATE_H_
+#endif // !SICT_VALIDATE_H_
