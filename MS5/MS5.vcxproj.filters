@@ -35,6 +35,9 @@
     <Text Include="m54_output.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="m55_output.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="posdataOrigin.csv">
