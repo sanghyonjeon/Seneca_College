@@ -6,18 +6,20 @@
 |------|:---:|:----:|:----|:----| 
 | [MS1](#milestone-1) | V0.9 | 5 | [Watch](https://youtu.be/2OWD-szjMIw)  |  |
 | [MS2](#milestone-2) | V1.0 | 9|  [Watch](https://youtu.be/A9a4i5TChAc) |  |
-| [MS3](#milestone-3) | V0.9| 10|  [Watch](https://youtu.be/5oL2RdYeWuo) | The text is being proof-read |
+| [MS3](#milestone-3) | V0.9| 10|  [Watch](https://youtu.be/5oL2RdYeWuo) | |
 |   | V0.91| |   | Fixed few typos |
 |   | V1.0| |   | Moved m_displayType to protected section for MS4 |
 |   | V1.1| |   | corrected operator== definition |
 |   | V1.2| |   | missing [itemType](#itemtype) function name is added  |
-| [MS4](#milestone-4) | V0.9 | 4 | [Watch](https://youtu.be/urtlxJHtEC8) |  The text is being proof-read  |
+| [MS4](#milestone-4) | V0.9 | 4 | [Watch](https://youtu.be/urtlxJHtEC8) |  |
 |  | V1.0 |  |  |  The [write oveload](#write-2) logic corrected   |
-| [MS5](#milestone-5) | [m51](#ms51)-V0.9 | 14 | | The text is being proof-read |
-|  | [m52](#ms52)-V0.9 |  | | The text is being proof-read |
-|  | [m53](#ms53)-V0.9 |  | | The text is being proof-read |
-|  | [m54](#ms54)-V0.9 |  | | The text is being proof-read |
-|  | [m55](#ms55)-V0.9 |  | | The text is being proof-read<br />[posdataOrigin.csv](MS5/posdataOrigin.csv) file updated to accommodate the ms55 tester |
+| [MS5](#milestone-5) | | 14 | [Watch](https://youtu.be/E_CRdXMSgTE) |[Tester data explained](#tester-data)  |
+|  | [m51](#ms51)-V1.1 | | | [Total Asset Calculation Precision](#total-asset-calculation) |
+|  | [m52](#ms52)-V1.0 |  | |  |
+|  | [m53](#ms53)-V1.0 |  | | |
+|  | [m54](#ms54)-V1.0 |  | |  |
+|  | [m55](#ms55)-V1.0 |  | | |
+
 
 
 Your task for the project for this semester is to create simple Point of Sale (POS) application that keeps track of a small inventory of Goods to sell and can sell them at the cashier, issuing a bill of sale. 
@@ -986,6 +988,15 @@ After completion of each section upload your updates to the matrix and issue the
 ### Tester program
 The tester program for all MS5 submissions is the same <a href="MS5/main.cpp" target="_blank">main.cpp</a> but each menu option has test data of its own.
 
+### Tester Data
+The file <a href="MS5/posdataOrigin.csv" target="_blank">posdataOrigin.csv</a> contains some sample data that is added to help you debug your code. The data in this file overwrites the data file the <a href="MS5/main.cpp" target="_blank">main.cpp</a> uses every time it runs, to make sure you always start your program with the same data set, so you can debug your code more easily. 
+
+Also, the content of the data file is displayed before and after the POS test is done so you can track the data changes and make sure your program works correctly. 
+
+> Note that the content of the initial data may and probably will change when you are submitting your project milestones (by the submitter program). Each data set will have the information needed to check the logic that is being tested at the time. 
+
+
+
 ### reflection 
 
 Create a file called `reflect.txt` and add the following:  
@@ -1044,7 +1055,12 @@ Implement the saveRecs to save all the items pointed by `Iptr` array in the data
 - loop through the Items pointed by the `Iptr` pointers and insert them into the ofstream instance up to `nptr`.
 
 
+
+
 ### listItems
+
+
+
 - Print the action title `Listing Items`.
 - <a href="https://intro2c.sdds.ca/F-Refinements/algorithms#sorting" target="_blank">Sort all the Items</a> in `Iptr` array based on their name in ascending order. 
 - Print the Title/Header of the list: 
@@ -1052,13 +1068,24 @@ Implement the saveRecs to save all the items pointed by `Iptr` array in the data
  Row | SKU    | Item Name          | Price |TX |Qty |   Total | Expiry Date |
 -----|--------|--------------------|-------|---|----|---------|-------------|
 ```
-- Loop through the items up to `nptr` and display the row and the `Items` in `POS_LIST` format, calculating the total asset value of the `Items`.
+- Loop through the items up to `nptr` and display the row and the `Items` in `POS_LIST` format, calculating the total asset value of the `Items`. Total asset is the sum of (cost() * quantity) of each item. see [Total asset calculation](#total-asset-calculation)
 - Print the footer and the total asset as follows:
 ```text
 -----^--------^--------------------^-------^---^----^---------^-------------^
-                               Total Asset: $  |       3567.13|
+                               Total Asset: $  |       9999.99|
 -----------------------------------------------^--------------^
 ```
+
+#### Total asset calculation 
+
+> Note: to make sure not to have a different outcome for the total asset because of the `double` type's imprecise operations, add this method to your item to calculate the cost of an item, having `m_price` being the price of the item and `m_taxed` the flag for the item being taxed or not:  
+    
+```C++
+  double Item::cost()const {
+      return m_price * (1 + m_taxed * TAX);
+  }
+```
+
 
 ## MS51 submission 
 
