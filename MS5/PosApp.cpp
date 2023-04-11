@@ -20,9 +20,13 @@ that my professor provided to complete my project milestones.
 using namespace std;
 
 namespace sdds {
-	PosApp::PosApp(const char* filename) {
+	PosApp::PosApp(const char* filename) : m_noOfItems(0) {
 		strncpy(m_filename, filename, MAX_FILENAME_LENGTH);
-		m_filename[MAX_FILENAME_LENGTH] = '\0';
+		m_filename[MAX_FILENAME_LENGTH - 1] = '\0';
+
+		for (int i = 0; i < MAX_NO_ITEMS; ++i) {
+			m_items[i] = nullptr;
+		}
 	}
 
 	int PosApp::menu() {
@@ -34,7 +38,7 @@ namespace sdds {
 		cout << "2- Add item" << endl;
 		cout << "3- Remove item" << endl;
 		cout << "4- Stock item" << endl;
-		cout << "5- Point of Sale" << endl;
+		cout << "5- POS" << endl;
 		cout << "0- exit program" << endl;
 		cout << "> ";
 
@@ -92,7 +96,7 @@ namespace sdds {
 	}
 
 	void PosApp::printActionTitle(const char* title) const {
-		const int width = 73;
+		const int width = 72;
 		cout << ">>>> ";
 		cout << left << setw(width) << setfill('.') << title;
 		cout << endl;
@@ -116,20 +120,26 @@ namespace sdds {
 
 		// Load records
 		char itemType;
-		while (input && m_noOfItems < MAX_NO_ITEMS) {
+		bool isReading = true;
+		while (input && m_noOfItems < MAX_NO_ITEMS && isReading) {
 			input >> itemType;
 
-			if (itemType == 'P') {
-				m_items[m_noOfItems] = new Perishable();
+			if (!input) {
+				isReading = false;
 			}
-			else if (itemType == 'N') {
-				m_items[m_noOfItems] = new NonPerishable();
-			}
+			else {
+				if (itemType == 'P') {
+					m_items[m_noOfItems] = new Perishable();
+				}
+				else if (itemType == 'N') {
+					m_items[m_noOfItems] = new NonPerishable();
+				}
 
-			if (m_items[m_noOfItems]) {
-				input.ignore();
-				input >> *m_items[m_noOfItems];
-				m_noOfItems++;
+				if (m_items[m_noOfItems]) {
+					input.ignore();
+					input >> *m_items[m_noOfItems];
+					m_noOfItems++;
+				}
 			}
 		}
 		input.close();
@@ -140,7 +150,7 @@ namespace sdds {
 		ofstream output(m_filename);
 
 		for (int i = 0; i < m_noOfItems; i++) {
-			output << *m_items[i];
+			output << *m_items[i] << endl;
 		}
 
 		output.close();
@@ -155,9 +165,9 @@ namespace sdds {
 		printActionTitle("Listing Items");
 
 		// Sort all the Items in m_items array based on their name in ascending order using selection sort
-		for (int i = 0; i < m_noOfItems - 1; ++i) {
+		for (int i = 0; i < m_noOfItems - 1; i++) {
 			int minIndex = i;
-			for (int j = i + 1; j < m_noOfItems - 1; ++j) {
+			for (int j = i + 1; j < m_noOfItems; j++) {
 				if (compareItemsByName(m_items[j], m_items[minIndex])) {
 					minIndex = j;
 				}
@@ -175,17 +185,20 @@ namespace sdds {
 
 		// Loop through the items up to m_noOfItems and display the row and the Items in POS_LIST format
 		double totalAsset = 0.0;
-		for (int i = 0; i < m_noOfItems - 1; ++i) {
-			cout << setw(4) << setfill(' ') << right << i + 1 << " | ";
-			m_items[i]->write(cout);
-			cout << endl;
-			totalAsset += m_items[i]->cost() * m_items[i]->quantity();
+		for (int i = 0; i < m_noOfItems; ++i) {
+			if (m_items[i] != nullptr) {
+				cout << setw(4) << setfill(' ') << right << i + 1 << " | ";
+				m_items[i]->displayType(POS_LIST);
+				m_items[i]->write(cout);
+				cout << endl;
+				totalAsset += m_items[i]->cost() * m_items[i]->quantity();
+			}
 		}
 
 		// Print the footer and the total asset
 		cout << "-----^--------^--------------------^-------^---^----^---------^-------------^" << endl;
-		cout << setw(36) << right << "Total Asset: $  | " << setw(14) << right << fixed << setprecision(2) << totalAsset << "|" << endl;
-		cout << "-----------------------------------------------^--------------^" << endl;
+		cout << setw(49) << setfill(' ') << right << "Total Asset: $  | " << setw(13) << right << fixed << setprecision(2) << totalAsset << "|" << endl;
+		cout << "-----------------------------------------------^--------------^" << endl << endl;
 	}
 
 	/*
