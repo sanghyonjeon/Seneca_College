@@ -29,6 +29,12 @@ namespace sdds {
 		}
 	}
 
+	PosApp::~PosApp() {
+		for (int i = 0; i < m_noOfItems; ++i) {
+			delete m_items[i];
+		}
+	}
+
 	int PosApp::menu() {
 		int choice;
 		bool valid = false;
@@ -73,10 +79,11 @@ namespace sdds {
 			case 1:
 				listItems();
 				break;
-				/*
+			//MS52*********************************************************************
 			case 2:
 				addItem();
 				break;
+				/*
 			case 3:
 				removeItem();
 				break;
@@ -142,6 +149,7 @@ namespace sdds {
 				}
 			}
 		}
+		
 		input.close();
 	}
 
@@ -201,12 +209,52 @@ namespace sdds {
 		cout << "-----------------------------------------------^--------------^" << endl << endl;
 	}
 
-	/*
-void PosApp::addItem() {
-	cout << ">>>> Adding Item to the store................................................" << endl;
-	cout << "Running addItem()" << endl;
-}
+	// MS52 *************************************************************************
+	void PosApp::addItem() {
+		printActionTitle("Adding Item to the store");
 
+		if (m_noOfItems < MAX_NO_ITEMS) {
+			char perishable;
+			cout << "Is the Item perishable? (Y)es/(N)o: ";
+			cin >> perishable;
+
+			Item* newItem = nullptr;
+			if (tolower(perishable) == 'y') {
+				newItem = new Perishable();
+			}
+			else {
+				newItem = new NonPerishable();
+			}
+
+			bool isValid = false;
+			do {
+				cin.clear();
+				cin.ignore(1000, '\n');
+				cin >> *newItem;
+
+				if (!(*newItem)) {
+					newItem->write(cout);
+					cout << ", try again..." << endl;
+				}
+				else {
+					isValid = true;
+				}
+			} while (!isValid);
+
+			m_items[m_noOfItems] = newItem;
+			m_noOfItems++;
+
+			printActionTitle("DONE!");
+		}
+		else {
+			cout << "Inventory Full!" << endl;
+		}
+
+		return;
+	}
+	
+
+/*
 void PosApp::removeItem() {
 	cout << ">>>> Remove Item............................................................." << endl;
 	cout << "Running removeItem()" << endl;

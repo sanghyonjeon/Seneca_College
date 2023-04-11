@@ -19,6 +19,8 @@ that my professor provided to complete my project milestones.
 using namespace std;
 
 namespace sdds {
+    // Retrieves the current date and time of the system,
+    // and returns them through the argument list.
     void getSystemDate(int& year, int& mon, int& day, int& hour, int& min, bool dateOnly) {
         time_t t = time(NULL);
         tm lt = *localtime(&t);
@@ -33,11 +35,15 @@ namespace sdds {
             min = lt.tm_min;
         }
     }
-
+    
+    // Assigns and returns a unique integer value to a date-time value
     int uniqueDateValue(int year, int mon, int day, int hour, int min) {
         return year * 535680 + mon * 44640 + day * 1440 + hour * 60 + min;
     }
 
+    // Gets the year and the month,
+    // and returns the correct value for the number of days in that month
+    // (considers leap years)
     int daysOfMonth(int year, int month) {
         int days[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, -1 };
         int mon = month >= 1 && month <= 12 ? month : 13;

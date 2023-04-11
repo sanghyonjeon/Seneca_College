@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{d0bbc08a-9878-496c-8144-5a228013b18c}</ProjectGuid>
-    <RootNamespace>MS5</RootNamespace>
+    <ProjectGuid>{c208384d-65e2-47da-891d-c3b64b51cb2c}</ProjectGuid>
+    <RootNamespace>MS52</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,28 +127,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Bill.cpp" />
-    <ClCompile Include="Date.cpp" />
-    <ClCompile Include="Error.cpp" />
-    <ClCompile Include="Item.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="NonPerishable.cpp" />
-    <ClCompile Include="Perishable.cpp" />
-    <ClCompile Include="PosApp.cpp" />
-    <ClCompile Include="PosIO.cpp" />
-    <ClCompile Include="Utils.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="m51_output.txt" />
-    <Text Include="m52_output.txt" />
-    <Text Include="m53_output.txt" />
-    <Text Include="m54_output.txt" />
-    <Text Include="m55_output.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="posdataOrigin.csv" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Bill.h" />
     <ClInclude Include="Date.h" />
     <ClInclude Include="Error.h" />
@@ -159,6 +137,29 @@
     <ClInclude Include="PosApp.h" />
     <ClInclude Include="PosIO.h" />
     <ClInclude Include="Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="m51_output.txt" />
+    <Text Include="m52_output.txt" />
+    <Text Include="m53_output.txt" />
+    <Text Include="m54_output.txt" />
+    <Text Include="m55_output.txt" />
+    <Text Include="reflect.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="posdataOrigin.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Bill.cpp" />
+    <ClCompile Include="Date.cpp" />
+    <ClCompile Include="Error.cpp" />
+    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="NonPerishable.cpp" />
+    <ClCompile Include="Perishable.cpp" />
+    <ClCompile Include="PosApp.cpp" />
+    <ClCompile Include="PosIO.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

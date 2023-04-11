@@ -45,6 +45,7 @@ namespace sdds {
         PosApp(const char* filename);
 		PosApp(const PosApp& src) = delete;
 		PosApp& operator=(const PosApp& src) = delete;
+        ~PosApp();
 
 		void run();
     };
