@@ -1,5 +1,5 @@
 /* Citation and Sources...
-Final Project Milestone 51
+Final Project Milestone 53
 Module: PosApp
 Filename: PosApp.cpp
 Version: 1.0
@@ -83,10 +83,11 @@ namespace sdds {
 			case 2:
 				addItem();
 				break;
-				/*
+			//MS53*********************************************************************
 			case 3:
 				removeItem();
 				break;
+				/*
 			case 4:
 				stockItem();
 				break;
@@ -168,7 +169,7 @@ namespace sdds {
 		return strcmp(a->getName(), b->getName()) < 0;
 	}
 
-	void PosApp::listItems() {
+	void PosApp::listItems(bool showTotalAsset) {
 		// Print the action title "Listing Items"
 		printActionTitle("Listing Items");
 
@@ -203,10 +204,13 @@ namespace sdds {
 			}
 		}
 
-		// Print the footer and the total asset
 		cout << "-----^--------^--------------------^-------^---^----^---------^-------------^" << endl;
-		cout << setw(49) << setfill(' ') << right << "Total Asset: $  | " << setw(13) << right << fixed << setprecision(2) << totalAsset << "|" << endl;
-		cout << "-----------------------------------------------^--------------^" << endl << endl;
+
+		// Print the footer and the total asset only if showTotalAsset is true
+		if (showTotalAsset) {
+			cout << setw(49) << setfill(' ') << right << "Total Asset: $  | " << setw(13) << right << fixed << setprecision(2) << totalAsset << "|" << endl;
+			cout << "-----------------------------------------------^--------------^" << endl << endl;
+		}
 	}
 
 	// MS52 *************************************************************************
@@ -253,13 +257,64 @@ namespace sdds {
 		return;
 	}
 	
+	// MS53 *************************************************************************
+	int PosApp::selectItem() {
+		printActionTitle("Item Selection by row number");
+		cout << "Press <ENTER> to start...." << endl;
+		cin.ignore(1000, '\n');
+
+		listItems(false); // Call listItems() without showing the total asset
+
+		int rowNumber;
+		bool valid = false;
+
+		cout << "Enter the row number: ";
+
+		do {
+			cin >> rowNumber;
+
+			if (cin.fail()) {
+				cin.clear();
+				cin.ignore(1000, '\n');
+				cout << "Invalid Integer, try again: ";
+			}
+			else if (rowNumber < 1 || rowNumber > m_noOfItems) {
+				cout << "[1<=value<=" << m_noOfItems << "], retry: Enter the row number: ";
+			}
+			else {
+				valid = true;
+			}
+		} while (!valid);
+
+		return rowNumber;
+	}
+
+	void PosApp::removeItem() {
+		int rowNumber;
+
+		printActionTitle("Remove Item");
+		rowNumber = selectItem(); // Get the row number of the item to be removed
+
+		if (rowNumber > 0) {
+			int index = rowNumber - 1; // Convert row number to index in the m_items array
+
+			cout << "Removing...." << endl;
+			m_items[index]->displayType(POS_FORM);
+			m_items[index]->write(cout); // Show the item about to be removed in POS_FROM format
+
+			// Deallocate and remove the item from the m_items array
+			delete m_items[index];
+			for (int i = index; i < m_noOfItems - 1; i++) {
+				m_items[i] = m_items[i + 1];
+			}
+			m_items[m_noOfItems - 1] = nullptr;
+			m_noOfItems--;
+
+			printActionTitle("DONE!");
+		}
+	}
 
 /*
-void PosApp::removeItem() {
-	cout << ">>>> Remove Item............................................................." << endl;
-	cout << "Running removeItem()" << endl;
-}
-
 void PosApp::stockItem() {
 	cout << ">>>> Select an item to stock................................................." << endl;
 	cout << "Running stockItem()" << endl;

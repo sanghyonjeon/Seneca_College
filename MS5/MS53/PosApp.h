@@ -1,5 +1,5 @@
 /* Citation and Sources...
-Final Project Milestone 51
+Final Project Milestone 53
 Module: PosApp
 Filename: PosApp.h
 Version: 1.0
@@ -32,13 +32,15 @@ namespace sdds {
 
         void loadRecs();
         void saveRecs();
-        void listItems();
+        void listItems(bool showTotalAsset = true);
 
         int menu();
 
         // MS52 *************************************************************************
         void addItem();
-        //void removeItem();
+        // MS53 *************************************************************************
+        int selectItem();
+        void removeItem();
         //void stockItem();
         //void POS();
 
