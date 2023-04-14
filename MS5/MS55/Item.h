@@ -58,6 +58,7 @@ namespace sdds {
 		std::ostream& bprint(std::ostream& os) const;
 
 		const char* getName() const;
+		const char* getSku() const;
 	};
 	double& operator+=(double& lhs, const Item& rhs);
 }

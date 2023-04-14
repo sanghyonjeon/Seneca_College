@@ -16,6 +16,8 @@ that my professor provided to complete my project milestones.
 #include <iomanip>
 #include <cstring>
 #include "PosApp.h"
+#include "Utils.h"
+#include "Bill.h"
 
 using namespace std;
 
@@ -91,11 +93,10 @@ namespace sdds {
 			case 4:
 				stockItem();
 				break;
-				/*
+			//MS55*********************************************************************
 			case 5:
 				POS();
 				break;
-				*/
 			}
 		} while (choice != 0);
 
@@ -367,10 +368,64 @@ namespace sdds {
 		return value;
 	}
 
-/*
-void PosApp::POS() {
-	cout << ">>>> Starting Point of Sale.................................................." << endl;
-	cout << "Running POS()" << endl;
-}
-*/    
+	//MS55*********************************************************************
+	Item* PosApp::search(const char* sku) {
+		Item* foundItem = nullptr;
+
+		for (int i = 0; i < m_noOfItems && !foundItem; i++) {
+			if (strcmp(m_items[i]->getSku(), sku) == 0) {
+				foundItem = m_items[i];
+			}
+		}
+		return foundItem;
+	}
+
+	void PosApp::POS() {
+		printActionTitle("Starting Point of Sale");
+
+		Bill bill;
+		char sku[MAX_SKU_LEN + 1];
+		bool isSKUEmpty = false;
+
+		cin.clear();
+		cin.ignore(1000, '\n');
+
+		while (!isSKUEmpty) {
+			cout << "Enter SKU or <ENTER> only to end sale..." << endl;
+			cout << "> ";
+			cin.getline(sku, MAX_SKU_LEN + 1);
+
+			if (cin.fail()) {
+				cout << "SKU too long" << endl;
+				cin.clear();
+				cin.ignore(10000, '\n');
+			}
+			else {
+				isSKUEmpty = (sku[0] == '\0');
+				if (!isSKUEmpty) {
+					Item* foundItem = search(sku);
+					if (foundItem) {
+						if (foundItem->quantity() > 0) {
+							foundItem->operator-= (1);
+							foundItem->displayType(POS_FORM);
+							foundItem->write(cout);
+							cout << endl << ">>>>> Added to bill" << endl;
+
+							bill.add(foundItem);
+							cout << ">>>>> Total: " << fixed << setprecision(2) << bill.total() << endl;
+						}
+						else {
+							cout << ERROR_POS_STOCK << endl;
+						}
+					}
+					else {
+						cout << "!!!!! Item Not Found !!!!!" << endl;
+					}
+				}
+			}
+		}
+		// Print the bill
+		cout.fill(' ');
+		bill.print(cout);
+	}
 }

@@ -44,7 +44,9 @@ namespace sdds {
         // MS54 *************************************************************************
         void stockItem();
         int getInt(int minValue, int maxValue);
-        //void POS();
+        // MS55 *************************************************************************
+        void POS();
+        Item* search(const char* sku);
 
     public:
         PosApp(const char* filename);

@@ -307,7 +307,7 @@ namespace sdds {
 		strncpy(itemNameSubstring, m_itemName, 20);
 		itemNameSubstring[20] = '\0';
 
-		os << "| " << setw(20) << left << itemNameSubstring
+		os << setfill(' ') << "| " << setw(20) << left << itemNameSubstring
 			<< "| " << setw(9) << right << fixed << setprecision(2) << cost() << " "
 			<< "| " << setw(4) << (m_taxed ? "T  " : " ") << "|"
 			<< endl;
@@ -316,6 +316,10 @@ namespace sdds {
 
 	const char* Item::getName() const {
 		return m_itemName;
+	}
+
+	const char* Item::getSku() const {
+		return m_sku;
 	}
 
 	double& operator+=(double& lhs, const Item& rhs) {
