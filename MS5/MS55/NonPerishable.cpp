@@ -1,6 +1,6 @@
 /* Citation and Sources...
 Final Project Milestone 55
-Module: Perishable
+Module: NonPerishable
 Filename: NonPerishable.cpp
 Version: 1.0
 Author: Sang Hyon Jeon

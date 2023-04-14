@@ -1,7 +1,7 @@
 /* Citation and Sources...
-Final Project Milestone 51
-Module: NonPerishable
-Filename: NonPerishable.h
+Final Project Milestone 5
+Module: Utils
+Filename: Utils.h
 Version: 1.0
 Author: Sang Hyon Jeon
 Revision History
@@ -12,17 +12,12 @@ Date        Reason
 I have done all the coding by myself and only copied the code
 that my professor provided to complete my project milestones.
 -----------------------------------------------------------*/
-#ifndef SDDS_NONPERISHABLE_H_
-#define SDDS_NONPERISHABLE_H_
-#include "Item.h"
+#ifndef SDDS_UTILS_H_
+#define SDDS_UTILS_H_
 
 namespace sdds {
-    class NonPerishable : public Item {
-    public:
-        // Override the itemType function to return 'N'
-        virtual char itemType() const;
-        // Override the write function
-        virtual std::ostream& write(std::ostream& os) const;
-    };
+	void getSystemDate(int& year, int& mon, int& day, int& hour, int& min, bool dateOnly);
+	int uniqueDateValue(int year, int mon, int day, int hour, int min);
+	int daysOfMonth(int year, int month);
 }
-#endif // !SDDS_NONPERISHABLE_H_
+#endif // !SDDS_UTILS_H_
