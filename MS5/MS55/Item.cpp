@@ -215,13 +215,7 @@ namespace sdds {
 					os << setw(13) << left << "Price + tax:" << "N/A" << endl;
 				}
 
-				os << setw(13) << left << "Stock Qty:";
-				if (m_quantity == 0) {
-					os << ERROR_POS_STOCK << endl;
-				}
-				else {
-					os << quantity() << endl;
-				}
+				os << setw(13) << left << "Stock Qty:" << quantity() << endl;
 			}
 		}
 		else {
