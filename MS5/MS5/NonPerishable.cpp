@@ -18,14 +18,15 @@ that my professor provided to complete my project milestones.
 using namespace std;
 
 namespace sdds {
-    // Override the itemType function to return 'N'
+    /***** PUBLIC MEMBER FUNCTIONS *****/
+    // Override the itemType function of base Item class to return 'N'
     char NonPerishable::itemType() const {
         return 'N';
     }
 
-    // Override the write function
+    // Override the write function of base Item class
     std::ostream& NonPerishable::write(std::ostream& os) const {
-        // First, call the write function of the base class
+        // Call the write function of the base class
         sdds::Item::write(os);
 
         // Check if the object is in a good state

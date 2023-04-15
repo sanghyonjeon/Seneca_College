@@ -18,17 +18,21 @@ that my professor provided to complete my project milestones.
 #include "Date.h"
 
 namespace sdds {
-    class Perishable : public sdds::Item {
+    class Perishable : public Item {
+        /***** PRIVATE MEMBER ATTRIBUTE *****/
         Date m_expiryDate;
 
     public:
-        // Override the itemType function to return 'P'
-        virtual char itemType() const;
-        // Override the input and output functions
+        /***** INPUT AND OUTPUT FUNCTIONS *****/
+        // Override the input and output functions of base Item class
         virtual std::istream& read(std::istream& is);
         virtual std::ostream& write(std::ostream& os) const;
         virtual std::ifstream& load(std::ifstream& ifs);
         virtual std::ofstream& save(std::ofstream& ofs) const;
+
+        /***** OTHER PUBLIC MEMBER FUNCTION *****/
+        // Override the itemType function of base Item class to return 'P'
+        virtual char itemType() const;
     };
 
 }

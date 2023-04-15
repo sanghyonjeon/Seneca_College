@@ -18,22 +18,20 @@ that my professor provided to complete my project milestones.
 using namespace std;
 
 namespace sdds {
-    // Override the itemType function to return 'P'
-    char Perishable::itemType() const {
-        return 'P';
-    }
-
-    // Override the read function
+    /***** INPUT AND OUTPUT FUNCTIONS *****/
+    // Override the read function of base Item class
     std::istream& Perishable::read(std::istream& is) {
         bool inputValid = true;
 
         // Invoke the read of the Base class
         Item::read(is);
 
-        if (is && !is.fail()) {
+        if (is) {
             Date date;
+
             cout << "Expiry date (YYYY/MM/DD)" << endl;
             cout << "> ";
+
             if (!(is >> date)) {
                 inputValid = false;
             }
@@ -49,7 +47,7 @@ namespace sdds {
         return is;
     }
 
-    // Override the write function
+    // Override the write function of base Item class
     std::ostream& Perishable::write(std::ostream& os) const {
         // Invoke the write of the base class
         Item::write(os);
@@ -69,14 +67,14 @@ namespace sdds {
         return os;
     }
 
-    // Override the load function
+    // Override the load function of base Item class
     std::ifstream& Perishable::load(std::ifstream& ifs) {
         // Invoke the load of the Base class
         Item::load(ifs);
 
         bool inputValid = true;
 
-        if (ifs && !ifs.fail()) {
+        if (ifs) {
             Date date;
             ifs.ignore();
             if (!(ifs >> date)) {
@@ -94,7 +92,7 @@ namespace sdds {
         return ifs;
     }
 
-    // Override the save function
+    // Override the save function of base Item class
     std::ofstream& Perishable::save(std::ofstream& ofs) const {
         // Invoke the save of the Base class
         Item::save(ofs);
@@ -104,5 +102,12 @@ namespace sdds {
         }
 
         return ofs;
+    }
+
+
+    /***** OTHER PUBLIC MEMBER FUNCTION *****/
+    // Override the itemType function of base Item class to return 'P'
+    char Perishable::itemType() const {
+        return 'P';
     }
 }

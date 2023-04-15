@@ -19,9 +19,10 @@ that my professor provided to complete my project milestones.
 namespace sdds {
     class NonPerishable : public Item {
     public:
-        // Override the itemType function to return 'N'
+        /***** PUBLIC MEMBER FUNCTIONS *****/
+        // Override the itemType function of base Item class to return 'N'
         virtual char itemType() const;
-        // Override the write function
+        // Override the write function of base Item class
         virtual std::ostream& write(std::ostream& os) const;
     };
 }

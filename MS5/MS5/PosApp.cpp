@@ -22,25 +22,152 @@ that my professor provided to complete my project milestones.
 using namespace std;
 
 namespace sdds {
-	PosApp::PosApp(const char* filename) : m_noOfItems(0) {
-		strncpy(m_filename, filename, MAX_FILENAME_LENGTH);
-		m_filename[MAX_FILENAME_LENGTH - 1] = '\0';
+	/***** PRIVATE FUNCTIONS FOR MENU OPTIONS *****/
+	// Prints a title for an action.
+	void PosApp::printActionTitle(const char* title) const {
+		cout << ">>>> ";
+		cout << left << setw(72) << setfill('.') << title;
+		cout << endl;
+	}
 
-		for (int i = 0; i < MAX_NO_ITEMS; ++i) {
+	// Loads all the records of the data file into the Iptr array (m_items).
+	void PosApp::loadRecs() {
+		printActionTitle("Loading Items");
+
+		// Open the file for reading.
+		ifstream input(m_filename);
+
+		// If the file doesn't exist, create it and close.
+		if (!input) {
+			ofstream output(m_filename);
+			output.close();
+		}
+
+		// Clear the current items in the PosApp class.
+		for (int i = 0; i < m_noOfItems; i++) {
+			delete m_items[i];
 			m_items[i] = nullptr;
 		}
-	}
+		m_noOfItems = 0;
 
-	PosApp::~PosApp() {
-		for (int i = 0; i < m_noOfItems; ++i) {
-			delete m_items[i];
+		// Read and load item records from the file.
+		char itemType;
+		bool isReading = true;
+
+		while (input && m_noOfItems < MAX_NO_ITEMS && isReading) {
+			input >> itemType;
+
+			if (!input) {
+				isReading = false;
+			}
+			else {
+				// Create a new Perishable or NonPerishable item based on the itemType.
+				if (itemType == 'P') {
+					m_items[m_noOfItems] = new Perishable();
+				}
+				else if (itemType == 'N') {
+					m_items[m_noOfItems] = new NonPerishable();
+				}
+
+				// Read the item details and add it to the m_items array.
+				if (m_items[m_noOfItems]) {
+					input.ignore();
+					input >> *m_items[m_noOfItems];
+					m_noOfItems++;
+				}
+			}
 		}
+
+		// Close the file.
+		input.close();
 	}
 
-	int PosApp::menu() {
-		int choice;
-		bool valid = false;
+	// Saves all the items pointed by Iptr array (m_items) in the data file.
+	void PosApp::saveRecs() {
+		printActionTitle("Saving Data");
 
+		// Open the file for writing.
+		ofstream output(m_filename);
+
+		// Loop through the m_items array and save each item to the file.
+		for (int i = 0; i < m_noOfItems; i++) {
+			output << *m_items[i] << endl;
+		}
+
+		// Close the file.
+		output.close();
+	}
+
+	// Allows the user to select an Item by entering the row number.
+	int PosApp::selectItem() {
+		int value;
+		int minValue = 1;
+		int maxValue = m_noOfItems;
+
+		bool isInteger = false;
+		int rowNumber = -1;
+
+		printActionTitle("Item Selection by row number");
+		cout << "Press <ENTER> to start...." << endl;
+		cin.ignore(1000, '\n');
+
+		// Display the list of items without showing the total asset.
+		listItems(false);
+
+		cout << "Enter the row number: ";
+		cin >> value;
+
+		// Keep looping until the user enters a valid row number.
+		do {
+			if (cin) {
+				isInteger = true;
+			}
+
+			if (!isInteger) {
+				invalidInput();
+				cin >> value;
+			}
+			else {
+				rowNumber = getInt(minValue, maxValue, value);
+				if (rowNumber == -1) {
+					cout << "Enter the row number: ";
+					cin >> value;
+				}
+			}
+		} while (!isInteger || rowNumber == -1);
+
+		// Return the validated user's row number choice.
+		return rowNumber;
+	}
+
+	// Receives the SKU and returns the address of the item if matching SKU is found.
+	Item* PosApp::search(const char* sku) {
+		Item* foundItem = nullptr;
+
+		// Loop through all items in the array.
+		for (int i = 0; i < m_noOfItems && !foundItem; i++) {
+			// If the current item's SKU matches the given SKU, store its address.
+			if (strcmp(m_items[i]->sku(), sku) == 0) {
+				foundItem = m_items[i];
+			}
+		}
+
+		// Return the address of the found item or nullptr if not found.
+		return foundItem;
+	}
+
+
+	/***** MENU OPTIONS *****/
+	// Displays the menu and returns the user's choice.
+	int PosApp::menu() {
+		int value;
+		int minValue = MIN_MENU_OPTION;
+		int maxValue = MAX_MENU_OPTION;
+
+		bool isInteger = false;
+		int validInt = -1;
+
+		// Display the menu options.
 		cout << "The Sene-Store" << endl;
 		cout << "1- List items" << endl;
 		cout << "2- Add item" << endl;
@@ -49,130 +176,33 @@ namespace sdds {
 		cout << "5- POS" << endl;
 		cout << "0- exit program" << endl;
 		cout << "> ";
+		cin >> value;
 
+		// Keep asking for input until a valid option is selected.
 		do {
-			cin >> choice;
-
-			if (cin.fail()) {
-				cin.clear();
-				cin.ignore(1000, '\n');
-				cout << "Invalid Integer, try again: ";
+			if (cin) {
+				isInteger = true;
 			}
-			else if (choice < 0 || choice > 5) {
-				cout << "[0<=value<=5], retry: > ";
+
+			if (!isInteger) {
+				invalidInput();
+				cin >> value;
 			}
 			else {
-				valid = true;
-			}
-		} while (!valid);
-
-		return choice;
-	}
-
-	void PosApp::run() {
-		int choice;
-
-		loadRecs();
-
-		do {
-			choice = menu();
-
-			switch (choice) {
-			case 1:
-				listItems();
-				break;
-			//MS52*********************************************************************
-			case 2:
-				addItem();
-				break;
-			//MS53*********************************************************************
-			case 3:
-				removeItem();
-				break;
-			//MS54*********************************************************************
-			case 4:
-				stockItem();
-				break;
-			//MS55*********************************************************************
-			case 5:
-				POS();
-				break;
-			}
-		} while (choice != 0);
-
-		saveRecs();
-
-		cout << "Goodbye!" << endl;
-	}
-
-	void PosApp::printActionTitle(const char* title) const {
-		const int width = 72;
-		cout << ">>>> ";
-		cout << left << setw(width) << setfill('.') << title;
-		cout << endl;
-	}
-
-	void PosApp::loadRecs() {
-		printActionTitle("Loading Items");
-		ifstream input(m_filename);
-
-		if (!input) {
-			ofstream output(m_filename);
-			output.close();
-		}
-
-		// Empty the PosApp class
-		for (int i = 0; i < m_noOfItems; i++) {
-			delete m_items[i];
-			m_items[i] = nullptr;
-		}
-		m_noOfItems = 0;
-
-		// Load records
-		char itemType;
-		bool isReading = true;
-		while (input && m_noOfItems < MAX_NO_ITEMS && isReading) {
-			input >> itemType;
-
-			if (!input) {
-				isReading = false;
-			}
-			else {
-				if (itemType == 'P') {
-					m_items[m_noOfItems] = new Perishable();
-				}
-				else if (itemType == 'N') {
-					m_items[m_noOfItems] = new NonPerishable();
-				}
-
-				if (m_items[m_noOfItems]) {
-					input.ignore();
-					input >> *m_items[m_noOfItems];
-					m_noOfItems++;
+				validInt = getInt(minValue, maxValue, value);
+				if (validInt == -1) {
+					cout << "> ";
+					cin >> value;
 				}
 			}
-		}
-		
-		input.close();
+		} while (!isInteger || validInt == -1);
+
+		// Return the user's selected menu option.
+		return validInt;
 	}
 
-	void PosApp::saveRecs() {
-		printActionTitle("Saving Data");
-		ofstream output(m_filename);
-
-		for (int i = 0; i < m_noOfItems; i++) {
-			output << *m_items[i] << endl;
-		}
-
-		output.close();
-	}
-
-	bool compareItemsByName(const Item* a, const Item* b) {
-		return strcmp(a->getName(), b->getName()) < 0;
-	}
-
+	// Sorts all the items in Iptr array (m_items), and prints each item information.
 	void PosApp::listItems(bool showTotalAsset) {
-		// Print the action title "Listing Items"
 		printActionTitle("Listing Items");
 
 		// Sort all the Items in m_items array based on their name in ascending order using selection sort
@@ -215,15 +245,17 @@ namespace sdds {
 		}
 	}
 
-	// MS52 *************************************************************************
+	// Adds a new item to the inventory.
 	void PosApp::addItem() {
 		printActionTitle("Adding Item to the store");
 
+		// Check if there is space for a new item
 		if (m_noOfItems < MAX_NO_ITEMS) {
 			char perishable;
 			cout << "Is the Item perishable? (Y)es/(N)o: ";
 			cin >> perishable;
 
+			// Create a new item based on user input (perishable or non-perishable)
 			Item* newItem = nullptr;
 			if (tolower(perishable) == 'y') {
 				newItem = new Perishable();
@@ -232,6 +264,7 @@ namespace sdds {
 				newItem = new NonPerishable();
 			}
 
+			// Loop until a valid item is entered
 			bool isValid = false;
 			do {
 				cin.clear();
@@ -247,6 +280,7 @@ namespace sdds {
 				}
 			} while (!isValid);
 
+			// Add the new item to the array and increment the item count
 			m_items[m_noOfItems] = newItem;
 			m_noOfItems++;
 
@@ -258,51 +292,25 @@ namespace sdds {
 
 		return;
 	}
-	
-	// MS53 *************************************************************************
-	int PosApp::selectItem() {
-		printActionTitle("Item Selection by row number");
-		cout << "Press <ENTER> to start...." << endl;
-		cin.ignore(1000, '\n');
 
-		listItems(false); // Call listItems() without showing the total asset
-
-		int rowNumber;
-		bool valid = false;
-
-		cout << "Enter the row number: ";
-
-		do {
-			cin >> rowNumber;
-
-			if (cin.fail()) {
-				cin.clear();
-				cin.ignore(1000, '\n');
-				cout << "Invalid Integer, try again: ";
-			}
-			else if (rowNumber < 1 || rowNumber > m_noOfItems) {
-				cout << "[1<=value<=" << m_noOfItems << "], retry: Enter the row number: ";
-			}
-			else {
-				valid = true;
-			}
-		} while (!valid);
-
-		return rowNumber;
-	}
-
+	// Removes an item selected by the user.
 	void PosApp::removeItem() {
 		int rowNumber;
 
 		printActionTitle("Remove Item");
-		rowNumber = selectItem(); // Get the row number of the item to be removed
 
+		// Get the row number of the item to be removed
+		rowNumber = selectItem();
+
+		// Check if a valid row number is returned
 		if (rowNumber > 0) {
-			int index = rowNumber - 1; // Convert row number to index in the m_items array
+			// Convert row number to index in the m_items array
+			int index = rowNumber - 1;
 
+			// Show the item about to be removed in POS_FROM format
 			cout << "Removing...." << endl;
 			m_items[index]->displayType(POS_FORM);
-			m_items[index]->write(cout); // Show the item about to be removed in POS_FROM format
+			m_items[index]->write(cout);
 
 			// Deallocate and remove the item from the m_items array
 			delete m_items[index];
@@ -316,26 +324,53 @@ namespace sdds {
 		}
 	}
 
-	// MS54 *************************************************************************
+	// Adds the number of items to be added to the quantity of the Item.
 	void PosApp::stockItem() {
 		int rowNumber;
-		int quantityToAdd;
+		int value;
+
+		bool isInteger = false;
+		int quantityToAdd = -1;
 
 		printActionTitle("Select an item to stock");
-		rowNumber = selectItem(); // Get the row number of the item to be stocked
+
+		// Get the row number of the item to be stocked
+		rowNumber = selectItem();
 
 		if (rowNumber > 0) {
-			int index = rowNumber - 1; // Convert row number to index in the m_items array
+			// Convert row number to index in the m_items array
+			int index = rowNumber - 1;
 
-			cout << "Selected Item:" << endl;
-			m_items[index]->displayType(POS_FORM);
-			m_items[index]->write(cout); // Display the selected item
-
-			cout << "Enter quantity to add: ";
-			// Get an integer (fool-proof) between 1 and current number of items minus the MAX_STOCK_NUMBER
 			int minValue = 1;
 			int maxValue = MAX_STOCK_NUMBER - m_items[index]->quantity();
-			quantityToAdd = getInt(minValue, maxValue);
+
+			// Display the selected item
+			cout << "Selected Item:" << endl;
+			m_items[index]->displayType(POS_FORM);
+			m_items[index]->write(cout); 
+
+			// Get an integer (fool-proof) between 1 and current number of items minus the MAX_STOCK_NUMBER
+			cout << "Enter quantity to add: ";
+			cin >> value;
+
+			// Loop until a valid quantity is entered
+			do {
+				if (cin) {
+					isInteger = true;
+				}
+
+				if (!isInteger) {
+					invalidInput();
+					cin >> value;
+				}
+				else {
+					quantityToAdd = getInt(minValue, maxValue, value);
+					if (quantityToAdd == -1) {
+						cout << "Enter quantity to add: ";
+						cin >> value;
+					}
+				}
+			} while (!isInteger || quantityToAdd == -1);
 
 			// Add the quantity to the item
 			*m_items[index] += quantityToAdd;
@@ -343,75 +378,47 @@ namespace sdds {
 			printActionTitle("DONE!");
 		}
 	}
-
-	int PosApp::getInt(int minValue, int maxValue) {
-		int value;
-		bool validInput = false;
-
-		while (!validInput) {
-			cin >> value;
-			if (cin.fail()) {
-				// Input is not an integer
-				cin.clear();
-				cin.ignore(1000, '\n');
-				cout << "Invalid Integer, try again: ";
-			}
-			else if (value < minValue || value > maxValue) {
-				// Input is outside the allowed range
-				cout << "[" << minValue << "<=value<=" << maxValue << "], retry: Enter quantity to add: ";
-			}
-			else {
-				validInput = true; // Input is a valid integer within the allowed range
-			}
-		}
-
-		return value;
-	}
-
-	//MS55*********************************************************************
-	Item* PosApp::search(const char* sku) {
-		Item* foundItem = nullptr;
-
-		for (int i = 0; i < m_noOfItems && !foundItem; i++) {
-			if (strcmp(m_items[i]->getSku(), sku) == 0) {
-				foundItem = m_items[i];
-			}
-		}
-		return foundItem;
-	}
-
+	
+	// Adds the searched item to the bill, and prints the total price of the bill so far.
 	void PosApp::POS() {
-		printActionTitle("Starting Point of Sale");
-
 		Bill bill;
 		char sku[MAX_SKU_LEN + 1];
 		bool isSKUEmpty = false;
 
+		printActionTitle("Starting Point of Sale");
+
 		cin.clear();
 		cin.ignore(1000, '\n');
 
+		// Keep asking for SKU until the user enters an empty SKU
 		while (!isSKUEmpty) {
 			cout << "Enter SKU or <ENTER> only to end sale..." << endl;
 			cout << "> ";
 			cin.getline(sku, MAX_SKU_LEN + 1);
 
-			if (cin.fail()) {
+			// Check if input is valid
+			if (!cin) {
 				cout << "SKU too long" << endl;
 				cin.clear();
 				cin.ignore(10000, '\n');
 			}
 			else {
 				isSKUEmpty = (sku[0] == '\0');
+
+				// If not empty, search for the item
 				if (!isSKUEmpty) {
 					Item* foundItem = search(sku);
+
 					if (foundItem) {
 						if (foundItem->quantity() > 0) {
-							foundItem->operator-= (1);
+							(*foundItem) -= 1;
+
 							foundItem->displayType(POS_FORM);
 							foundItem->write(cout);
 							cout << endl << ">>>>> Added to bill" << endl;
 
 							bill.add(foundItem);
+
 							cout << ">>>>> Total: " << fixed << setprecision(2) << bill.total() << endl;
 						}
 						else {
@@ -424,8 +431,99 @@ namespace sdds {
 				}
 			}
 		}
+
 		// Print the bill
 		cout.fill(' ');
 		bill.print(cout);
 	}
+
+
+	/***** OTHER PRIVATE MEMBER FUNCTION *****/
+	// Clears the input buffer and shows Invalid Integer message
+	void PosApp::invalidInput() {
+		cin.clear();
+		cin.ignore(1000, '\n');
+		cout << "Invalid Integer, try again: ";
+	}
+
+	// If input integer is within given range, it returns the integer. Otherwise, returns -1.
+	int PosApp::getInt(int minValue, int maxValue, int value) {
+		int choice;
+
+		if (value < minValue || value > maxValue) {
+			// Input is outside the allowed range
+			cout << "[" << minValue << "<=value<=" << maxValue << "], retry: ";
+			choice = -1;
+		}
+		else {
+			choice = value;
+		}
+
+		return choice;
+	}
+
+	// Returns true if the first Item's name is alphabetically lower than the second Item's name.
+	bool PosApp::compareItemsByName(const Item* a, const Item* b) {
+		return strcmp(a->name(), b->name()) < 0;
+	}
+
+
+	/***** CONSTRUCTOR AND DESTRUCTOR *****/
+	// Constructor that takes the filename.
+	PosApp::PosApp(const char* filename) : m_noOfItems(0) {
+		strncpy(m_filename, filename, MAX_FILENAME_LEN);
+
+		// Initialize m_items array with nullptr
+		for (int i = 0; i < MAX_NO_ITEMS; ++i) {
+			m_items[i] = nullptr;
+		}
+	}
+
+	// Destructor.
+	PosApp::~PosApp() {
+		for (int i = 0; i < m_noOfItems; ++i) {
+			delete m_items[i];
+		}
+	}
+
+
+	/***** PUBLIC MEMBER FUNCTION *****/
+	// Implements the program logic, including loading records, displaying menu, 
+	// executing actions, saving records, and displaying goodbye message.
+	void PosApp::run() {
+		int choice;
+
+		loadRecs();
+
+		do {
+			choice = menu();
+
+			switch (choice) {
+			case 1:
+				listItems();
+				break;
+			case 2:
+				addItem();
+				break;
+			case 3:
+				removeItem();
+				break;
+			case 4:
+				stockItem();
+				break;
+			case 5:
+				POS();
+				break;
+			}
+		} while (choice != 0);
+
+		saveRecs();
+
+		cout << "Goodbye!" << endl;
+	}
+
+
+
+
+	
 }

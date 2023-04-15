@@ -18,25 +18,38 @@ that my professor provided to complete my project milestones.
 
 namespace sdds {
 	class Error {
+		/***** PRIVATE MEMBER VARIABLE *****/
 		char* m_message;
 
 	public:
+		/***** CONSTRUCTORS *****/
+		// Default constructor
 		Error();
+		// Constructor that takes an error message as an argument
 		Error(const char* message);
+
+		/***** RULE OF THREE *****/
+		// Copy constructor
 		Error(const Error& src);
+		// Copy assignment operator
+		Error& operator=(const Error& src);
+		// Destructor
 		~Error();
 
-		Error& operator=(const Error& src);
+		/***** OTHER PUBLIC MEMBER FUNCTIONS *****/
+		// Assignment operator that takes a message as an argument
 		Error& operator=(const char* message);
-
+		// Conversion operator that returns a boolean value,
+		// indicating if the error object is in an erroneous state
 		operator bool() const;
-
+		// Clears the error message and returns the error object
 		Error& clear();
+		// Getter function that returns the error message
 		const char* getMessage() const;
-
-		bool isClear() const;
-		void setMessage(const char* message);
 	};
+
+	/***** HELPER FUNCTION ******/
+	// Overloaded stream insertion operator that inserts the error message into an output stream
 	std::ostream& operator<<(std::ostream& ostr, const Error& rhs);
 }
 #endif // !SDDS_ERROR_H_

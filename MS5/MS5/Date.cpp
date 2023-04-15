@@ -21,53 +21,8 @@ that my professor provided to complete my project milestones.
 using namespace std;
 
 namespace sdds {
-	Date::Date() {
-		int year, month, day, hour, minute;
-		getSystemDate(year, month, day, hour, minute, false);
-		*this = Date(year, month, day, hour, minute).dateOnly(false);
-	}
-
-	Date::Date(int year, int month, int day) {
-		*this = Date(year, month, day, 0, 0).dateOnly(true);
-
-		// Check the date and time validity and set the error message accordingly
-		if (year < MIN_YEAR || year > MAX_YEAR) {
-			m_error = "Invalid Year";
-		}
-		else if (month < 1 || month > 12) {
-			m_error = "Invalid Month";
-		}
-		else if (day < 1 || day > daysOfMonth(year, month)) {
-			m_error = "Invalid Day";
-		}
-	}
-
-	Date::Date(int year, int month, int day, int hour, int minute) {
-		m_year = year;
-		m_month = month;
-		m_day = day;
-		m_hour = hour;
-		m_minute = minute;
-		dateOnly(false);
-
-		// Check the date and time validity and set the error message accordingly
-		if (year < MIN_YEAR || year > MAX_YEAR) {
-			m_error = "Invalid Year";
-		}
-		else if (month < 1 || month > 12) {
-			m_error = "Invalid Month";
-		}
-		else if (day < 1 || day > daysOfMonth(year, month)) {
-			m_error = "Invalid Day";
-		}
-		else if (!m_dateOnly && (hour < 0 || hour > 23)) {
-			m_error = "Invalid Hour";
-		}
-		else if (!m_dateOnly && (minute < 0 || minute > 59)) {
-			m_error = "Invlid Minute";
-		}
-	}
-
+	/***** PRIVATE MEMBER FUNCTIONS *****/
+	// Overloaded comparison operators that compare two Date objects and return a boolean value.
 	bool Date::operator==(const Date& rhs) const {
 		return uniqueDateValue(m_year, m_month, m_day, m_hour, m_minute) == uniqueDateValue(rhs.m_year, rhs.m_month, rhs.m_day, rhs.m_hour, rhs.m_minute);
 	}
@@ -92,149 +47,173 @@ namespace sdds {
 		return uniqueDateValue(m_year, m_month, m_day, m_hour, m_minute) >= uniqueDateValue(rhs.m_year, rhs.m_month, rhs.m_day, rhs.m_hour, rhs.m_minute);
 	}
 
+	// Checks and validates the date and time values.
+	void Date::validate() {
+		if (m_year < MIN_YEAR || m_year > MAX_YEAR) {
+			m_error = ERROR_INVALID_YEAR;
+		}
+		else if (m_month < MIN_MONTH || m_month > MAX_MONTH) {
+			m_error = ERROR_INVALID_MONTH;
+		}
+		else if (m_day < MIN_DAY || m_day > daysOfMonth(m_year, m_month)) {
+			m_error = ERROR_INVALID_DAY;
+		}
+		else if (!m_dateOnly && (m_hour < MIN_HOUR || m_hour > MAX_HOUR)) {
+			m_error = ERROR_INVALID_HOUR;
+		}
+		else if (!m_dateOnly && (m_minute < MIN_MINUTE || m_minute > MAX_MINUTE)) {
+			m_error = ERROR_INVALID_MINUTE;
+		}
+	}
+
+
+	/***** CONSTRUCTORS *****/
+	// Default constructor
+	Date::Date() {
+		int year, month, day, hour, minute;
+		getSystemDate(year, month, day, hour, minute, false);
+		*this = Date(year, month, day, hour, minute);
+		dateOnly(false);
+	}
+
+	// Constructor that takes year, month, and day as arguments
+	Date::Date(int year, int month, int day) {
+		*this = Date(year, month, day, 0, 0);
+		dateOnly(true);
+	}
+
+	// Constructor that takes year, month, day, hour, and minute as arguments
+	Date::Date(int year, int month, int day, int hour, int minute) {
+		m_year = year;
+		m_month = month;
+		m_day = day;
+		m_hour = hour;
+		m_minute = minute;
+		if (m_hour == 0 && m_minute == 0) {
+			dateOnly(true);
+		}
+		else {
+			dateOnly(false);
+		}
+		
+
+		// Validate the date and time values
+		validate();
+	}
+
+
+	/***** PUBLIC MEMBER FUNCTIONS *****/
+	// Sets the date-only flag (m_dateOnly) to the specified value
 	Date& Date::dateOnly(bool value) {
 		m_dateOnly = value;
-		if (value) {
+
+		if (m_dateOnly) {
 			m_hour = 0;
 			m_minute = 0;
 		}
+
 		return *this;
 	}
 
+	// Conversion operator that returns the opposite of the state of the error attribute
 	Date::operator bool() const {
 		return !m_error;
 	}
 
+	// Getter function that returns the Error object
 	const Error& Date::error() const {
 		return m_error;
 	}
 
-	Error& Date::error() {
-		return m_error;
-	}
-	
-	int Date::getYear() const {
-		return m_year;
-	}
-	int Date::getMonth() const {
-		return m_month;
-	}
-	int Date::getDay() const {
-		return m_day;
-	}
-	int Date::getHour() const {
-		return m_hour;
-	}
-	int Date::getMinute() const {
-		return m_minute;
-	}
-	bool Date::getDateOnly() const {
-		return m_dateOnly;
-	}
+	// Prints the date information to an output stream
+	std::ostream& Date::print(std::ostream& ostr) const {
+		ostr << setfill('0') << right << m_year << '/';
+		ostr << setw(2) << m_month << '/';
+		ostr << setw(2) << m_day;
 
-	void Date::setYear(int year) {
-		m_year = year;
-	}
-
-	void Date::setMonth(int month) {
-		m_month = month;
-	}
-
-	void Date::setDay(int day) {
-		m_day = day;
-	}
-
-	void Date::setHour(int hour) {
-		m_hour = hour;
-	}
-
-	void Date::setMinute(int minute) {
-		m_minute = minute;
-	}
-
-	void Date::print(std::ostream& ostr) const {
-		ostr.fill('0');
-		ostr.setf(ios::right);
-		ostr << getYear() << '/';
-		ostr.width(2);
-		ostr << getMonth() << '/';
-		ostr.width(2);
-		ostr << getDay();
-		if (!getDateOnly() && m_minute != 0 && m_hour != 0) {
+		if (!m_dateOnly) {
 			ostr << ", ";
-			ostr.width(2);
-			ostr << getHour() << ':';
-			ostr.width(2);
-			ostr << getMinute();
+			ostr << setw(2) << m_hour << ':';
+			ostr << setw(2) << m_minute;
 		}
-	}
 
-	std::ostream& operator<<(std::ostream& ostr, const Date& rhs) {
-		if (rhs) {
-			rhs.print(ostr);
-		}
-		else {
-			ostr << rhs.error().getMessage() << "(";
-			rhs.print(ostr);
-			ostr << ")";
-		}
 		return ostr;
 	}
 
+	// Reads the date information from an input stream
 	std::istream& Date::rread(std::istream& istr) {
-		m_year = m_month = m_day = m_hour = m_minute = 0;
-		m_error = "NULL Date";
+		Error error;
 
-		m_error.clear();
+		// Read the year from the input stream
 		istr >> m_year;
 		if (!istr) {
-			m_error = "Cannot read year entry";
+			error = ERROR_READ_YEAR;
 		}
 		istr.ignore();
+
+		// Read the month from the input stream
 		istr >> m_month;
-		if (!m_error && !istr) {
-			m_error = "Cannot read month entry";
+		if (!error && !istr) {
+			error = ERROR_READ_MONTH;
 		}
 		istr.ignore();
+
+		// Read the day from the input stream
 		istr >> m_day;
-		if (!m_error && !istr) {
-			m_error = "Cannot read day entry";
+		if (!error && !istr) {
+			error = ERROR_READ_DAY;
 		}
-		if (!getDateOnly() && istr.peek() != '\n' && istr.peek() != EOF) {
+
+		// If not a date-only object and there is more data in the input stream
+		if (!m_dateOnly && istr.peek() != '\n' && istr.peek() != EOF) {
 			istr.ignore();
+
+			// Read the hour from the input stream
 			istr >> m_hour;
-			if (!m_error && !istr) {
-				m_error = "Cannot read hour entry";
+			if (!error && !istr) {
+				error = ERROR_READ_HOUR;
 			}
 			istr.ignore();
+
+			// Read the minute from the input stream
 			istr >> m_minute;
-			if (!m_error && !istr) {
-				m_error = "Cannot read minute entry";
+			if (!error && !istr) {
+				error = ERROR_READ_MINUTE;
 			}
 		}
 		else {
-			m_hour = m_minute = 0;
+			// Set the object as a date-only status
+			dateOnly(true);
 		}
+
+		// Validate the date and time values if input stream was successfully read
 		if (istr) {
-			if (m_year < MIN_YEAR || m_year > MAX_YEAR) {
-				error() = "Invalid Year";
-			}
-			else if (m_month < 1 || m_month > 12) {
-				error() = "Invalid Month";
-			}
-			else if (m_day < 1 || m_day > daysOfMonth(m_year, m_month)) {
-				error() = "Invalid Day";
-			}
-			else if (!getDateOnly() && (m_hour < 0 || m_hour > 23)) {
-				error() = "Invalid Hour";
-			}
-			else if (!getDateOnly() && (m_minute < 0 || m_minute > 59)) {
-				error() = "Invlid Minute";
-			}
+			validate();
 		}
+
 		return istr;
 	}
 
+
+	/***** HELPER FUNCTIONS ******/
+	// Overloaded stream insertion operator that inserts the date information into an output stream
+	std::ostream& operator<<(std::ostream& ostr, const Date& rhs) {
+		// Check if the Date object is valid (no errors)
+		if (rhs) {
+			// If valid, print the date information to the output stream
+			rhs.print(ostr);
+		}
+		else {
+			// If not valid, print the error message, followed by the date information in parentheses
+			ostr << rhs.error() << "(";
+			rhs.print(ostr);
+			ostr << ")";
+		}
+
+		return ostr;
+	}
+
+	// Overloaded stream extraction operator that reads the date information from an input stream
 	std::istream& operator>>(std::istream& istr, Date& rhs) {
 		return rhs.rread(istr);
 	}
