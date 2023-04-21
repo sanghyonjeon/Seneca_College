@@ -1,0 +1,62 @@
+/***********************************************************************
+                          Workshop - #1 (Part-2)
+// Full Name  : Sang Hyon Jeon
+// Student ID#: 1123552194
+// Email      : shjeon5@myseneca.ca
+// Section    : NBB
+// Date       : January 23, 2023
+//
+// Authenticity Declaration:
+// I have done all the coding by myself and only copied the code that my
+// professor provided to complete my workshops and assignments.
+***********************************************************************/
+After looking over my Workshop 1 DIY solution, I realized that I had
+implemented a handful of useful concepts and topics covered in the course.
+For exmaple:
+
+1. Modular Programming
+This knowledge had allowed me to break down my program into smaller, more
+manageable parts ("modules"). As a result, instead of one giant,
+complicated file containing hundreds of lines of code, I was able to
+maintain readability, all the while organizing parts of my code into
+specific, and relevant categories such as UI-related, File-related, and
+the main program. In the process, I was able to practice the uses of
+#include, and the #ifndef #define safeguards to make sure that the
+compiler is reading the files as needed.
+
+2. Types
+Knowing the different variable types, as well as their uses, have helped
+me greatly during this Workshop. For example, the data file which we were
+working with (students.csv), contained several different types of data--
+int, double, and char. In order to manipulate specific parts of the data
+(sorting by student number for example), knowledge about types were
+essential.
+
+3. Functions
+This workshop required multiple functions to work together. In order to do
+so, I had to use my knowledge on functions, such as the return type, and
+the passing of arguments. While creating functions, I was able to implment
+and familiarize myself with the use of namespaces.
+
+4. Loops
+In this workshop, depending on the situation, I was required to use each of
+the three types of loops: for loop, do-while loop, and while loop. For
+example, when sorting the data by student number, I used a nested for loop,
+also known as "bubble sort". However, when prompting the user for a valid
+input, I used a do-while loop, to make sure that the loop runs at least
+once. Lastly, an example of when I used a while-loop was when creating the
+clearInputBuffer function. This was because in order to clear the buffer,
+I had to keep using "getchar" if and until a certain condition is met (in
+this case, until the buffer was "empty").
+
+5. Pointers and Addresses
+Although the points I made above have stood out to me the most, I can't
+forget about the use of pointers and addresses in this Workshop. For example,
+when passing a struct type variable, I used the address of the struct. This
+lessened the stress and the time it took for my compiler, because I learned
+that passing an address of a struct via the use of a pointer, requires a
+lot less memory and time, than passing by value. Also, I was able to make
+permanent changes to certain variables using pointers.
+
+Overall, I believe that this Workshop has touched upon many of the basic, and
+essential concepts in order to efficiently write code for a program.

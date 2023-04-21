@@ -1,0 +1,60 @@
+/***********************************************************************
+                          Workshop - #8 (Part-2)
+// Full Name  : Sang Hyon Jeon
+// Student ID#: 113552194
+// Email      : shjeon5@myseneca.ca
+// Section    : NBB
+// Date       : March 27, 2023
+//
+// Authenticity Declaration:
+// I have done all the coding by myself and only copied the code that my
+// professor provided to complete my workshops and assignments.
+***********************************************************************/
+In this workshop and Milestone 3, I learned about the importance of
+utilizing pure virtual functions, abstract base classes, and working
+with class hierarchies in C++. I explored how these concepts enable me
+to design flexible and maintainable code that adheres to the principles
+of object-oriented programming.
+
+One of the key concepts I learned was defining pure virtual functions in
+an abstract base class. This allowed me to define a common interface for
+derived classes, ensuring they implement specific behaviours. Abstract
+base classes are classes that cannot be instantiated and only serve as a
+blueprint for derived classes. By using abstract base classes, I gained
+a better understanding of how to design a class hierarchy to ensure that
+the base class enforces specific behaviours for its derived classes.
+
+Another important topic I explored was implementing behaviours using
+virtual functions. Virtual functions enable polymorphism in C++, which
+allowed me to call the appropriate derived class's method from a base
+class pointer. This is especially useful when working with a collection
+of objects that belong to different derived classes but share a common
+base class.
+
+A few challenges I encountered during this workshop and Milestone 3
+include:
+1. Memory management: Throughout the workshop, I had to deal with memory
+allocation and deallocation, especially when working with dynamic arrays
+and pointers to objects. Ensuring that memory was allocated and
+deallocated correctly, without causing memory leaks, was a challenge
+that required careful attention and understanding of C++ memory
+management techniques.
+2. Error handling and input validation: Ensuring that user inputs were
+properly validated and handling errors that could occur during input
+processing was another challenging aspect of this workshop. I had to
+carefully implement input validation checks to avoid incorrect data
+being used in the program, and manage input streams to handle potential
+errors and unwanted characters. This required a good understanding of
+how C++ input streams work and how to utilize functions like ignore()
+to manage input processing.
+3. Debugging and troubleshooting: Throughout the workshop and Milestone 3,
+I encountered various issues with the code, such as incorrect output
+formats, thrown exceptions, and uninitialized variables. Debugging and
+troubleshooting these issues required a systematic approach and a deep
+understanding of the C++ language and the concepts covered in the
+workshop.
+
+Overall, this workshop and Milestone 3 have deepened my understanding of
+object-oriented programming in C++ and taught me valuable concepts and
+techniques related to class hierarchies, abstract base classes, and
+polymorphism.

@@ -1,0 +1,47 @@
+/***********************************************************************
+                          Workshop - #10 (Part-2)
+// Full Name  : Sang Hyon Jeon
+// Student ID#: 113552194
+// Email      : shjeon5@myseneca.ca
+// Section    : NBB
+// Date       : April 10, 2023
+//
+// Authenticity Declaration:
+// I have done all the coding by myself and only copied the code that my
+// professor provided to complete my workshops and assignments.
+***********************************************************************/
+In Workshop 10 and the most recent milestone, I learned about function
+templates, implementing calls to function templates, and the syntax of
+constrained casts and their purposes. Function templates are a powerful
+feature in C++ that allows us to create a single function that can
+handle different data types through the use of type parameters. This
+eliminates the need for duplicating code for each specific data type and
+promotes code reusability.
+
+During the workshop, I created a function template called validate that
+takes four arguments: a minimum value, an array of test values, the
+number of elements in the array, and an array of boolean values for
+validation results. The function compares each test value against the
+minimum value and updates the corresponding boolean array element based
+on the result. This template function can be used with different data
+types, such as integers, characters, and user-defined objects like
+Employee and Student.
+
+One of the challenges I faced was understanding the correct way to
+include and use the function template in other files. I learned that
+templates should generally be defined in header files to avoid linker
+errors. I also learned about the importance of using namespaces and the
+scope resolution operator :: to access functions within a specific
+namespace.
+
+Another topic covered in the workshop was the constrained cast, which
+is a type of cast in C++ that allows us to convert an object from one
+type to another, but only if the object is compatible with the target
+type. This can be useful for ensuring that an object meets certain
+criteria before it is processed further in the program.
+
+Overall, this workshop and the milestone has helped me understand the
+concepts of function templates and constrained casts, and their
+practical applications in C++ programming. The knowledge gained will be
+invaluable for writing efficient, reusable, and flexible code in future
+projects.

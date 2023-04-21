@@ -1,0 +1,44 @@
+/***********************************************************************
+                          Workshop - #2 (Part-2)
+// Full Name  : Sang Hyon Jeon
+// Student ID#: 1123552194
+// Email      : shjeon5@myseneca.ca
+// Section    : NBB
+// Date       : January 30, 2023
+//
+// Authenticity Declaration:
+// I have done all the coding by myself and only copied the code that my
+// professor provided to complete my workshops and assignments.
+***********************************************************************/
+Building on to what we have learned in the previous workshop (modularity,
+functions, using header and implementation files, etc.), this workshop
+focused mostly on the following topics:
+
+1. Allocating and deallocating dynamic memory of an array.
+2. Overload functions
+3. Creating and using references
+
+Specifically, in this workshop, I needed to dynamically allocate memory of
+customers in CustomersRecords, in order to be able to add the customers.
+One of the main advantages of doing so, is the fact that it lessened memory
+waste. This is thanks to the fact that the memory is allocated only when
+needed, and is deleted once it has served its purpose. Another advantage
+of dynamic memory allocation desmonstrated in this Workshop is the fact that
+the allocation happens at compile time, and allows us the largest amount
+of memory and freedom to work with.
+
+Overloading functions was very useful in this Workshop. For example, we had
+to use function overloading when creaing the EmptyRecord(); functions. The
+use of overloading allowed for an easier readability, as well as achieving
+efficiency by allowing us to use the same function name for different
+arguments and different purposes, also known as "polymorphism".
+
+Creating and using references also greatly contributed to efficiency. Passing
+large objects by value as parameters for other functions can definitely
+result in performance drop. Using aliases for these values, known as "references"
+can help minimize the stress on the compiler, and thus, a faster running program.
+
+Looking back, I realize that all of the concepts we have learned in this
+Workshop was for the sole purpose of increasing efficiency, and learning how
+to carry out tasks while using minimal memory space, and achieving faster run
+time.

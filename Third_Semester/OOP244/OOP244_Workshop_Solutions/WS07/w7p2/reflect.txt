@@ -1,0 +1,47 @@
+/***********************************************************************
+                          Workshop - #7 (Part-2)
+// Full Name  : Sang Hyon Jeon
+// Student ID#: 113552194
+// Email      : shjeon5@myseneca.ca
+// Section    : NBB
+// Date       : March 20, 2023
+//
+// Authenticity Declaration:
+// I have done all the coding by myself and only copied the code that my
+// professor provided to complete my workshops and assignments.
+***********************************************************************/
+In completing Workshop 7 and Milestone 2 of the OOP244 project, I
+learned about several important concepts in object-oriented programming,
+particularly in the context of inheritance and class hierarchies.
+
+First, I learned how to extend an existing base class. This involved
+utilizing private data attributes within the base class to ensure proper
+encapsulation. In some cases, protected methods and attributes can be
+employed to allow derived classes to access these data attributes or
+methods without compromising the principles of encapsulation.
+
+Next, I focused on defining and implementing derived classes. This
+entailed overriding a subset of methods from the base class to provide
+new functionality specific to the derived class. Additionally, I created
+new methods not present in the base class to further extend the
+capabilities of the derived class. Throughout the implementation process,
+I invoked base class methods and constructors by passing parameters,
+which allowed for more efficient and modular code.
+
+One of the primary benefits of using class hierarchies is code re-use,
+and I learned how to leverage this concept to reduce code duplication and
+promote better software design. By using inheritance, I could take
+advantage of existing functionality in the base class and extend it for
+specialized derived classes, ultimately leading to more maintainable and
+scalable code.
+
+During the course of completing these tasks, I faced some difficulties,
+particularly when it came to properly handling input streams in the
+overloaded extraction operator for the Date class. I learned how to
+carefully check for input errors and handle invalid input by clearing
+error states and ignoring extra characters.
+
+Overall, the experience of working through Workshop 7 and Milestone 2
+helped deepen my understanding of inheritance, class hierarchies, and
+various techniques for efficient and maintainable code in object-oriented
+programming.

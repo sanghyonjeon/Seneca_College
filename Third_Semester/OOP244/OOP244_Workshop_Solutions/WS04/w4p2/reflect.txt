@@ -1,0 +1,46 @@
+/***********************************************************************
+                          Workshop - #4 (Part-2)
+// Full Name  : Sang Hyon Jeon
+// Student ID#: 1123552194
+// Email      : shjeon5@myseneca.ca
+// Section    : NBB
+// Date       : February 13, 2023
+//
+// Authenticity Declaration:
+// I have done all the coding by myself and only copied the code that my
+// professor provided to complete my workshops and assignments.
+***********************************************************************/
+In this workshop, I learned about the basics of class constructors,
+destructors, and references in C++. A constructor is a special member
+function of a class. A constructor is automatically called when an object
+of that class is created. It is used to initialize the objects of that
+class. A default constructor takes no parameters and is automatically
+called if no other constructor is specified. Custom constructors can be
+created with different numbers of arguments to initialize the object in
+a specific way.
+
+When an object of a class goes out of scope, a destructor is
+automatically called to free up any memory that was dynamically
+allocated within the class. The destructor is the counterpart of the
+constructor and is used to prevent memory leaks in C++ programs.
+
+I also learned about references in C++. A reference is the alias for a
+variable and can be used to manipulate the original variable. The &
+operator is used to declare a reference, and it is initialized with the
+address of an existing variable. The reference must be initialized when
+it is declared and cannot be changed to refer to a different variable
+after that.
+
+One of the difficulties I faced during this workshop was understanding
+the use of references in the read() function. I struggled with the
+concept of a reference to the current object and how to use it to
+return the current object from a member function. However, after
+reading the material and practicing with examples, I was able to
+understand the concept better.
+
+In conclusion, this workshop was a great opportunity for me to learn
+about the basics of class constructors, destructors, and references in
+C++. It was a challenging workshop, but I was able to overcome the
+difficulties and complete it successfully. I am now more confident
+in my understanding of these topics and look forward to using what I
+learned in future projects.

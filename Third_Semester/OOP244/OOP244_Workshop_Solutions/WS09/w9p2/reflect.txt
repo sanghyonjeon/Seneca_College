@@ -1,0 +1,54 @@
+/***********************************************************************
+                          Workshop - #9 (Part-2)
+// Full Name  : Sang Hyon Jeon
+// Student ID#: 113552194
+// Email      : shjeon5@myseneca.ca
+// Section    : NBB
+// Date       : April 3, 2023
+//
+// Authenticity Declaration:
+// I have done all the coding by myself and only copied the code that my
+// professor provided to complete my workshops and assignments.
+***********************************************************************/
+In the workshop, I learned about creating a class hierarchy with the
+Person and Contact modules. The Person class represented a person's
+information, such as their name, and demonstrated the use of
+constructors, destructors, and copy constructors. For example, the
+Person class had a default constructor and a destructor that managed
+resource deallocation. The copy constructor and the copy assignment
+operator in the Person class allowed for proper copying of objects,
+adhering to the rule of three.
+
+The Contact module demonstrated inheritance by extending the Person
+class. It added address, city, province, and postal code information and
+provided helper functions to set these attributes. The Contact class
+demonstrated the management of dynamic memory allocation for its member
+attributes and showed how destructors, copy constructors, and copy
+assignment operators were implemented in derived classes following the
+rule of three.
+
+In the project milestone, I worked on implementing the NonPerishable and
+Perishable classes, which inherited from the Item class. The
+NonPerishable class had an overridden itemType function that returned
+'N', identifying the item as non-perishable. The write function was also
+overridden, which printed "N / A" when in LIST display mode and a line
+with "=" characters when in FORM display mode.
+
+The Perishable class had a Date attribute representing the expiry date
+and an overridden itemType function that returned 'P' for perishable
+items. The input and output functions were also overridden, such as the
+read function, which prompted the user for the expiry date, and the
+write function, which displayed the expiry date differently depending on
+the display mode (LIST or FORM).
+
+Some difficulties I faced included understanding the intricacies of
+constructors, destructors, and copy constructors, as well as managing
+dynamic memory allocation in the Contact module. Also, formatting of the
+outputs was challenging to debug. These challenges helped me to develop
+a better understanding of C++ memory management and the rule of three.
+
+Overall, the workshop and project milestones provided me with valuable
+hands-on experience working with encapsulation, constructors,
+destructors, copy constructors, inheritance, and dynamic memory
+allocation in C++ programming. It helped me understand these essential
+concepts and their applications in real-world scenarios.
