@@ -1,0 +1,47 @@
+/***********************************************************************
+                          Workshop - #5 (Part-2)
+// Full Name  : Sang Hyon Jeon
+// Student ID#: 1123552194
+// Email      : shjeon5@myseneca.ca
+// Section    : NBB
+// Date       : February 20, 2023
+//
+// Authenticity Declaration:
+// I have done all the coding by myself and only copied the code that my
+// professor provided to complete my workshops and assignments.
+***********************************************************************/
+In completing this workshop, I have learned about several important
+topics in C++. One of the most important topics was the overload of
+binary member operators. I learned how to overload binary operators so
+that they can be used with objects of user-defined classes. This is a
+very important concept in C++ programming because it allows us to create
+more organized and readable code.
+
+Another topic that was covered in this workshop was the creation and
+definition of type conversion operators. Type conversion operators are
+used to convert objects of one type to objects of another type. This is
+an important concept because it allows us to write our code with more 
+flexibility.
+
+I also learned about creating and defining helper operators without
+using the friendship of a C++ class. This is a useful technique because
+it allows us to create helper operators that are not tightly coupled to
+a specific class, which makes the code more reusable and maintainable.
+
+Finally, I learned about reusing member operators. I learned how to
+reuse member operators by overloading them with different types of
+objects, which makes the code more concise and readable. This is an
+important concept because it allows us to write more efficient and
+readable code.
+
+There were a few concepts that I struggled with, such as the
+implementation of type conversion operators and the reusages of member
+operators. Although these topics were challenging for me, with the help
+of the LAB part of the Workshop, I was more familiar with implementing
+the DIY part.
+
+Overall, this workshop was a great learning experience for me. I learned
+several important topics in C++ programming and was able to apply my
+knowledge to create more efficient and readable code. I am confident
+that the concepts and techniques that I learned in this workshop will be
+very useful to me in my future programming projects.

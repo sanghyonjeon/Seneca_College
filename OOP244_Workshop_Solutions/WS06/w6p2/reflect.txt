@@ -1,0 +1,43 @@
+/***********************************************************************
+                          Workshop - #6 (Part-2)
+// Full Name  : Sang Hyon Jeon
+// Student ID#: 113552194
+// Email      : shjeon5@myseneca.ca
+// Section    : NBB
+// Date       : March 13, 2023
+//
+// Authenticity Declaration:
+// I have done all the coding by myself and only copied the code that my
+// professor provided to complete my workshops and assignments.
+***********************************************************************/
+In this workshop and Milestone 1, I learned about defining and creating
+copy constructors and copy assignment operators (as well as prohibiting
+these actions), also known as the Rule of Three. This is a crucial
+aspect of C++ programming as it ensures that the deep copy of an object
+is created correctly and that the assignment operator is properly
+overloaded. To implement this, I had to understand the difference
+between shallow copy and deep copy and the significance of using
+pointers and dynamic memory allocation in creating a deep copy.
+
+Additionally, I learned how to read and write to and from text files
+using the C++ standard library functions such as ifstream and ofstream.
+This involved creating an instance of ifstream/ofstream, opening a file
+to read the data from, storing it in an object, and writing data from an
+object to a file.
+
+I also learned about resizing dynamically allocated memory. This
+involved using new and delete operators to allocate and deallocate
+memory dynamically. This is necessary when we need to change the size of
+a collection of objects, for example, when adding or removing elements.
+
+Finally, I learned how to overload the insertion operator, which allowed
+me to print the contents of an object using a stream, such as cout. I
+also learned how to overload the extraction operator, which allows us to
+read the contents of an object using a stream, such as cin.
+
+Overall, completing this workshop has helped me gain a deeper
+understanding of these concepts and how to apply them in practice. One of
+the difficulties that I faced was in understanding the difference between
+creating a copy of an object and creating a reference to an object, and
+ensuring that the copy constructor and copy assignment operator were
+implemented correctly.
